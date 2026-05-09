@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus को Difference और Stabilization से समझना - Complete Book</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        chapterblue: '#1F3A6D',
+                        goldline: '#B08D2F',
+                        lightbg: '#f8fafc',
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                        serif: ['Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax for rendering Mathematical Equations ONLY -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        
+        /* Smooth Chapter Transitions */
+        .chapter-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .chapter-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #B08D2F; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1F3A6D; }
+
+        /* Pure HTML/CSS Boxed Statements (Fix for MathJax Hindi Rendering Issue) */
+        .boxed-statement {
+            border: 2px solid #1F3A6D;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            background-color: #eff6ff; /* Light blue background */
+            margin: 2rem auto;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1F3A6D;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-width: 85%;
+        }
+
+        .ch-title-border {
+            border-bottom: 3px solid #B08D2F;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        /* Interactive Canvas Styling */
+        canvas {
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 650px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Typography */
+        p { margin-bottom: 1.25rem; line-height: 1.8; font-size: 1.1rem; color: #334155; }
+        h3 { margin-top: 2.5rem; margin-bottom: 1rem; color: #1F3A6D; font-weight: bold; font-size: 1.5rem; }
+        h4 { margin-top: 1.5rem; margin-bottom: 1rem; color: #B08D2F; font-weight: bold; font-size: 1.25rem; }
+        
+        /* Tables */
+        table.math-table { margin: 1.5rem auto; border-collapse: collapse; background-color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 0.5rem; overflow: hidden; width: 80%; max-width: 500px;}
+        table.math-table th, table.math-table td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: center; }
+        table.math-table th { background-color: #f1f5f9; font-weight: bold; color: #1F3A6D; }
+        
+        .nav-btn.active-nav { background-color: #eff6ff; border-right: 4px solid #1F3A6D; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden fixed top-4 right-4 z-50 bg-chapterblue text-white p-2 rounded shadow-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="bg-white w-72 h-full border-r border-gray-200 flex flex-col absolute md:relative z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shadow-xl md:shadow-none">
+        <div class="p-6 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+            <h1 class="text-xl font-bold text-chapterblue leading-tight">Calculus को Difference और Stabilization से समझना</h1>
+            <p class="text-sm text-goldline font-semibold mt-2">Abhishek Kumar</p>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-1" id="nav-links">
+            <!-- JS will inject buttons here -->
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto p-6 md:p-12 relative scroll-smooth" id="main-content">
+        <div class="max-w-4xl mx-auto pb-24">
+            
+            <!-- Cover Page -->
+            <section id="ch-0" class="chapter-content active text-center">
+                <div class="py-16">
+                    <h1 class="text-4xl md:text-6xl font-bold text-chapterblue mb-8 leading-tight">Calculus को Difference और Stabilization से समझना</h1>
+                    <div class="w-32 h-1 bg-goldline mx-auto mb-10"></div>
+                    <p class="text-2xl text-gray-700 mb-3">A Computational Interpretation of</p>
+                    <p class="text-xl text-gray-600 mb-12 font-medium">Derivatives, Integration, Differential Equations<br>और Numerical Thinking</p>
+                    
+                    <div class="my-12">
+                        <canvas id="coverCanvas" width="600" height="250" class="border-none shadow-none bg-transparent"></canvas>
+                    </div>
+
+                    <p class="text-2xl font-bold text-chapterblue mb-2">Abhishek Kumar</p>
+                    <p class="text-lg text-gray-600 mb-12">Physics, Numerical Analysis,<br>Scientific Computation and Mathematical Thinking</p>
+                    
+                    <button onclick="switchChapter(1)" class="bg-chapterblue text-white px-10 py-4 rounded-full hover:bg-opacity-90 transition shadow-xl font-bold text-lg inline-flex items-center gap-2">
+                        पुस्तक पढ़ना शुरू करें 
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Chapter 1 -->
+            <section id="ch-1" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 1: प्रस्तावना</h2>
+                <p>Calculus आधुनिक mathematics, physics, engineering, numerical analysis, computational science और scientific modeling की सबसे महत्वपूर्ण भाषाओं में से एक है। गति, परिवर्तन, संचय, heat flow, wave propagation, fluid motion, optimization, probability, electromagnetism और differential equations जैसे लगभग सभी वैज्ञानिक विषय किसी न किसी रूप में calculus की भाषा का उपयोग करते हैं।</p>
+                <p>परम्परागत textbooks में calculus को सामान्यतः limits, symbolic differentiation और formal integration techniques के माध्यम से प्रस्तुत किया जाता है। इस प्रक्रिया में 
+                \[ \frac{dy}{dx}, \qquad dx, \qquad \int \]
+                जैसे symbols प्रारम्भ से ही अत्यन्त abstract रूप में सामने आते हैं। Mathematical rigor की दृष्टि से यह approach अत्यन्त शक्तिशाली है, किन्तु अनेक विद्यार्थियों के लिए इससे एक समस्या उत्पन्न होती है — symbolic manipulation और वास्तविक scientific computation के बीच का सम्बन्ध स्पष्ट नहीं हो पाता।</p>
+                
+                <p>उदाहरण के लिए derivative को सामान्यतः "instantaneous rate of change" कहा जाता है, किन्तु practical computation में हम लगभग हमेशा finite differences से आरम्भ करते हैं: \[ \frac{\Delta y}{\Delta x} \]</p>
+                <p>इस पुस्तक का मुख्य उद्देश्य calculus को एक ऐसे viewpoint से समझना है जिसमें finite differences, stabilization, approximation, averaging और accumulation को केंद्रीय भूमिका दी जाए। इस पुस्तक का मूल प्रश्न है:</p>
+                
+                <div class="boxed-statement">क्या quotient scale को refine करने पर stabilize हो रहा है?</div>
+                
+                <p>Classical mathematics कहेगी \(\lim_{\Delta x\to0} \frac{\Delta y}{\Delta x} = 3\)। किन्तु computational viewpoint से एक दूसरी बात भी महत्वपूर्ण है। Quotient actual infinity तक पहुँचे बिना ही stabilize होने लगता है। Practical science में अक्सर वास्तविक प्रश्न यह नहीं होता कि "क्या infinitesimal वास्तव में प्राप्त हुआ?", बल्कि यह होता है कि:</p>
+                
+                <div class="boxed-statement">क्या local behavior sufficiently stable हो गया है?</div>
+                
+                <p>इस पुस्तक में repeatedly यह viewpoint सामने आएगा कि अनेक differential quantities को stabilized local finite differences के रूप में समझा जा सकता है। उदाहरण के लिए यदि हम लिखते हैं \(\frac{dp}{dy}=-ap\), तो इसका computational meaning यह है कि छोटे interval पर pressure का change लगभग इस प्रकार होगा: \[ \Delta p \approx -ap\,\Delta y \]</p>
+                <p>यह पुस्तक इस विचार को explore करती है कि derivative को निम्न प्रकार से समझना संभव है:</p>
+                <div class="boxed-statement">Derivative is an idealized stabilized finite difference.</div>
+                <p>और इसी प्रकार:</p>
+                <div class="boxed-statement">Integration is accumulation of stabilized local changes.</div>
+            </section>
+
+            <!-- Chapter 2 -->
+            <section id="ch-2" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 2: अंतर अनुपात और Stabilization</h2>
+                <p>Calculus की अधिकांश foundational quantities किसी न किसी प्रकार के quotient से उत्पन्न होती हैं। Speed, density, pressure, electric field, current density, heat flow, probability density — इन सभी quantities की शुरुआत मूलतः किसी ratio या quotient से होती है:
+                \[ \frac{\Delta y}{\Delta x}, \qquad \frac{\Delta F}{\Delta S}, \qquad \frac{\Delta Q}{\Delta t}, \qquad \frac{\Delta m}{\Delta V} \]</p>
+                
+                <div class="boxed-statement">आख़िर limit वास्तव में क्या कर रही है?</div>
+
+                <h3>Finite Quotients का प्रारम्भिक अर्थ</h3>
+                <p>मान लीजिए किसी function \(y=f(x)\) के लिए हम दो points लेते हैं: \(x\) और \(x+\Delta x\)। Corresponding change होगा: \(\Delta y = f(x+\Delta x)-f(x)\)। अब quotient \(\frac{\Delta y}{\Delta x}\) essentially average rate of change को व्यक्त करता है।</p>
+                <p>यदि \(f(x)=x^2\), और \(x=2\) लें, तो:
+                \[ \frac{\Delta y}{\Delta x} = \frac{(2+\Delta x)^2-4}{\Delta x} = 4+\Delta x \]</p>
+
+                <!-- Sim 1 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 1: Stabilization of Difference Quotient</h4>
+                    <p class="text-sm text-gray-600 mb-4">यहाँ हम $f(x) = x^2$ के लिए $x=2$ पर $\Delta x$ को छोटा करके stabilization observe करेंगे।</p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">Step size ($\Delta x$): <span id="sim1-dx-val" class="text-chapterblue font-mono">1.000</span></label>
+                        <input type="range" id="sim1-slider" min="-3" max="0" step="0.05" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded text-center border">
+                        <p class="text-lg">$\frac{\Delta y}{\Delta x} = 4 + \Delta x =$ <span id="sim1-ratio" class="font-mono font-bold text-2xl text-chapterblue ml-2">5.000</span></p>
+                        <p id="sim1-msg" class="text-sm font-semibold text-goldline mt-2">Quotient is stabilizing...</p>
+                    </div>
+                </div>
+
+                <h3>Limit का वास्तविक Role</h3>
+                <p>Limit केवल "infinity तक जाने" की प्रक्रिया नहीं है। बल्कि:</p>
+                <div class="boxed-statement">stable local behavior को isolate करने की प्रक्रिया है।</div>
+
+                <h3>जब Stabilization Fail हो जाता है</h3>
+                <p>अब एक महत्वपूर्ण उदाहरण देखें: \(y=|x|\)। Origin के पास quotient देखें। यदि \(\Delta x>0\), तो \(\frac{\Delta y}{\Delta x} = 1\)। लेकिन यदि \(\Delta x<0\), तो \(\frac{\Delta y}{\Delta x} = -1\)। यहाँ quotient किसी single stable value की ओर converge नहीं करता। इसी कारण:</p>
+                <div class="boxed-statement">derivative exist नहीं करता।</div>
+
+                <h3>Difference Quotients और Measurement</h3>
+                <p>Physical science में अधिकांश quantities सीधे measure नहीं की जातीं। हम वास्तव में finite averages measure करते हैं। इस अर्थ में:</p>
+                <div class="boxed-statement">instantaneous speed = stabilized average speed</div>
+            </section>
+
+            <!-- Chapter 3 -->
+            <section id="ch-3" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 3: तात्क्षणिक चाल और Local Change</h2>
+                <p>Calculus की उत्पत्ति का सबसे महत्वपूर्ण historical तथा conceptual स्रोत motion का अध्ययन था। ग्रहों की गति, गिरती हुई वस्तुएँ, projectiles, oscillations तथा fluid motion जैसे प्रश्नों ने mathematicians और physicists को यह समझने के लिए प्रेरित किया कि किसी quantity का "change" वास्तव में किस प्रकार व्यक्त किया जाए।</p>
+                
+                <div class="boxed-statement">किसी exact instant पर speed क्या है?</div>
+
+                <!-- Sim 2 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 2: Secant to Tangent ($y=x^2$)</h4>
+                    <p class="text-sm text-gray-600 mb-4">As $\Delta x$ approaches 0, the secant line (average rate) stabilizes into the tangent line (instantaneous rate).</p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">Interval ($\Delta x$): <span id="sim2-dx-val" class="text-chapterblue font-mono">1.50</span></label>
+                        <input type="range" id="sim2-slider" min="0.01" max="3" step="0.01" value="1.5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <canvas id="sim2Canvas" width="600" height="300"></canvas>
+                </div>
+
+                <h3>Local Change का Meaning</h3>
+                <p>Derivative essentially local behavior को व्यक्त करता है। यदि \(\frac{dx}{dt}=v\), तो small interval पर approximately: \(\Delta x \approx v\,\Delta t\)।</p>
+                <div class="boxed-statement">small change = rate × small interval</div>
+
+                <h3>Differential Notation का Intuitive Meaning</h3>
+                <p>अब Leibniz notation देखें: \(dx=v\,dt\)। Students प्रायः यहाँ confuse हो जाते हैं। उन्हें लगता है कि शायद \(dt\) को ordinary algebraic quantity की तरह multiply किया जा रहा है। लेकिन इसका वास्तविक operational meaning है: \(\Delta x \approx v\Delta t\)। अर्थात differential notation local approximation की compact language है।</p>
+
+                <h3>Local Linearity</h3>
+                <p>Calculus की शक्ति का मुख्य कारण यही है कि sufficiently small scales पर systems सरल हो जाते हैं। Curved motion locally linear हो जाता है। Variable rate locally constant बन जाता है। Complicated behavior locally predictable बन जाता है।</p>
+            </section>
+
+            <!-- Chapter 4 -->
+            <section id="ch-4" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 4: Differentials और Algebraic Manipulation</h2>
+                <p>Calculus सीखते समय students के लिए सबसे confusing topics में से एक differential notation होती है। विशेष रूप से expressions जैसे \(dy=f'(x)\,dx\), या \(\frac{dy}{dx}=ky\) से \(\frac{dy}{y}=k\,dx\) तक की manipulation अनेक विद्यार्थियों को mysterious प्रतीत होती है।</p>
+                
+                <div class="boxed-statement">क्या dx और dy वास्तव में ordinary algebraic quantities हैं?</div>
+
+                <h3>Variable Separation का Computational Meaning</h3>
+                <p>अब differential equations का एक fundamental example देखें: \(\frac{dy}{dx}=ky\)। Classically इसे rearrange करते हैं: \(\frac{dy}{y}=k\,dx\)। Students प्रायः यहीं रुक जाते हैं और पूछते हैं: "क्या हमने वास्तव में dx को multiply कर दिया?"</p>
+                <p>Computational viewpoint से इसका meaning अधिक स्पष्ट हो जाता है। यदि finite intervals पर देखें: \(\frac{\Delta y}{\Delta x} \approx ky\), तो \(\Delta y \approx ky\,\Delta x\)। अब divide करें: \(\frac{\Delta y}{y} \approx k\,\Delta x\)। अर्थात relative fractional change interval के proportional है।</p>
+
+                <h3>Integration का Emergence</h3>
+                <p>अब यदि \(\frac{dy}{y}=k\,dx\), तो accumulation करें: \(\int \frac{dy}{y} = \int k\,dx\)। Left side देता है \(\ln y\), और right side देता है \(kx+C\)। Exponentiate करने पर \(y=Ce^{kx}\)।</p>
+
+                <h3>Repeated Local Update</h3>
+                <p>अब उसी equation को finite update form में देखें: \(y_{n+1} = y_n+k y_n\Delta x = y_n(1+k\Delta x)\)। Repeated iteration से \(y_n = y_0(1+k\Delta x)^n\)। अब यदि \(n\to\infty\), \(\Delta x\to0\), तो \((1+k\Delta x)^n \to e^{kx}\)। इस प्रकार exponential function repeated finite local updates से emerge होती है।</p>
+
+                <div class="boxed-statement">Differentials describe local accumulated changes.</div>
+            </section>
+
+            <!-- Chapter 5 -->
+            <section id="ch-5" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 5: Pressure, Continuum Physics और Averaging</h2>
+                <p>Calculus तथा continuum physics के बीच सम्बन्ध को समझने के लिए pressure का concept अत्यन्त महत्वपूर्ण है। वास्तव में pressure का उदाहरण derivative, local averaging, stabilization तथा continuum approximation की पूरी philosophy को अत्यन्त concrete रूप में सामने लाता है।</p>
+                
+                <div class="boxed-statement">pressure = stabilized local average force density</div>
+
+                <h3>Continuum Approximation</h3>
+                <p>Continuum mechanics में हम quantities को point functions की तरह treat करते हैं \(P(x,y,z), \rho(x,y,z)\)। लेकिन वास्तव में ये quantities stabilized local averages होती हैं। \(\rho = \frac{dm}{dV}\) का operational meaning है \(\Delta m \approx \rho\,\Delta V\)।</p>
+                <div class="boxed-statement">Reality microscopic level पर discrete और noisy हो सकती है, लेकिन sufficiently large local averaging smooth continuum behavior उत्पन्न करती है।</div>
+
+                <h3>Pressure और Differential Equations</h3>
+                <p>Height बढ़ने पर pressure decrease करता है। Small height interval पर pressure change approximately proportional होता है: \(\Delta p \approx -ap\,\Delta y\)। Refined local limit लेने पर \(\frac{dp}{dy} = -ap\) प्राप्त होता है।</p>
+
+                <!-- Sim 3 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 3: Atmospheric Pressure Decay</h4>
+                    <p class="text-sm text-gray-600 mb-4">Differential equation $\frac{dp}{dy} = -ap$ indicates pressure drops proportionally to its current value, creating exponential decay.</p>
+                    <canvas id="sim3Canvas" width="600" height="250"></canvas>
+                </div>
+
+                <h3>Gravity Variation Example</h3>
+                <p>Newtonian gravitation: \(F=\frac{Gm_1m_2}{r^2}\)। Differentiate करने पर \(dF=-2\frac{Gm_1m_2}{r^3}dr\)। अतः \(\frac{dF}{F}=-2\frac{dr}{r}\)। इसका computational meaning है \(\Delta g \approx -2g\frac{\Delta r}{r}\)। अर्थात gravity local proportional variation follow करती है।</p>
+
+                <h3>Heat Conduction Example</h3>
+                <p>Fourier law: \(\frac{dQ}{dt} = -kA\frac{dT}{dx}\)।</p>
+                <div class="boxed-statement">heat equation local temperature differences का computational law है</div>
+
+                <h3>Specific Heat and Thermal Accumulation</h3>
+                <p>Differential form: \(c=\frac{dQ}{m\,dT} \implies dQ = mc\,dT\)। इसका meaning है: <strong>small temperature increase $\implies$ small heat addition</strong>। Total heat accumulation: \(Q = m\int_{T_i}^{T_f} c\,dT\)।</p>
+            </section>
+
+            <!-- Chapter 6 -->
+            <section id="ch-6" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 6: Differential Equations और Numerical Thinking</h2>
+                <div class="boxed-statement">Differential equation = local change law</div>
+                
+                <p>मान लीजिए किसी quantity \(y\) का change उसकी current value के proportional है: \(\frac{dy}{dx}=ky\)। यह equation essentially यह कहती है: <strong>local rate of change current value के proportional है</strong>।</p>
+                <p>अब इसे finite difference language में देखें: \(y_{\text{new}} \approx y_{\text{old}}(1+k\Delta x)\)।</p>
+
+                <h3>A Physical Example: Cooling</h3>
+                <p>Newton's law of cooling: \(\frac{dT}{dt} = -k(T-T_s)\)। Finite form देखें: \(\Delta T \approx -k(T-T_s)\Delta t\)।</p>
+                <div class="boxed-statement">rate of cooling temperature difference के proportional है</div>
+
+                <!-- Sim 4 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 4: Newton's Law of Cooling</h4>
+                    <p class="text-sm text-gray-600 mb-4">Object cooling towards ambient temperature $T_s = 20^\circ$C from initial $T_0 = 100^\circ$C.</p>
+                    <canvas id="sim4Canvas" width="600" height="250"></canvas>
+                </div>
+
+                <h3>Second Order Equations</h3>
+                <p>यदि \(\frac{d^2x}{dt^2}=f(x,t)\), तो वास्तव में system दो coupled local updates पर आधारित है: \(\frac{dx}{dt}=v\) और \(\frac{dv}{dt}=f(x,t)\)।</p>
+
+                <h3>Differential Equations as Evolution Laws</h3>
+                <div class="boxed-statement">given the present state, how does the system locally change?</div>
+            </section>
+
+            <!-- Chapter 7 -->
+            <section id="ch-7" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 7: संचय के रूप में Integration</h2>
+                <div class="boxed-statement">Integration = accumulation of local changes</div>
+
+                <p>यदि velocity variable हो \(v(t)=2t\), तो total distance ज्ञात करने के लिए interval को small pieces में divide करें \(\Delta t\)। प्रत्येक interval में \(\Delta x \approx v(t)\Delta t\)। अब सभी local contributions जोड़ें \(\sum v(t)\Delta t\)। Refinement पर \(\int v(t)\,dt\)।</p>
+                <div class="boxed-statement">Integral = stabilized refined summation</div>
+
+                <!-- Sim 5 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 5: Riemann Sum (Area under $-x^2+4$)</h4>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">Rectangles ($N$): <span id="sim5-n-val" class="text-chapterblue font-mono">4</span></label>
+                        <input type="range" id="sim5-slider" min="2" max="100" step="1" value="4" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <canvas id="sim5Canvas" width="600" height="300"></canvas>
+                    <p class="text-center mt-3 font-mono font-bold">Estimated Area: <span id="sim5-area" class="text-chapterblue">0.00</span> | Exact: 10.667</p>
+                </div>
+
+                <h3>Continuous Aggregation</h3>
+                <p>Integration को continuous aggregation की language भी कहा जा सकता है। उदाहरण \(m=\int \rho\,dV\)। इसका अर्थ है: <strong>total mass = accumulation of tiny masses</strong>।</p>
+
+                <h3>The Fundamental Theorem of Calculus</h3>
+                <p>यदि \(F(x)=\int_a^x f(t)\,dt\), तो \(\frac{dF}{dx}=f(x)\)। इस theorem का deeper meaning यह है:</p>
+                <div class="boxed-statement">local accumulation rate वही quantity है जो accumulate हो रही है</div>
+            </section>
+
+            <!-- Chapter 8 -->
+            <section id="ch-8" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 8: Euler Method और Iterative Approximation</h2>
+                <p>Modern computational science का एक अत्यन्त महत्वपूर्ण तथ्य यह है कि अधिकांश real-world differential equations exact analytic solutions नहीं देतीं। ऐसे situations में science numerical methods का उपयोग करती है, जिनमें सबसे fundamental method है Euler Method।</p>
+
+                <p>मान लीजिए differential equation है: \(\frac{dy}{dx}=f(x,y)\)। अब sufficiently small interval \(\Delta x=h\) लें। \(\Delta y \approx f(x,y)\,h\)। अतः:</p>
+                <div class="boxed-statement"> \(y_{n+1} = y_n+f(x_n,y_n)h\) </div>
+                <p>यह entire differential equation को repeated local updates में बदल देता है।</p>
+
+                <!-- Sim 6 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 6: Euler Method for $\frac{dy}{dx} = 0.5y$</h4>
+                    <p class="text-sm text-gray-600 mb-4">Observe how smaller step sizes ($h$) make the Euler iterative approximation (dots) converge closer to the exact analytical curve $e^{0.5x}$ (line).</p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">Step Size ($h$): <span id="sim6-h-val" class="text-chapterblue font-mono">1.00</span></label>
+                        <input type="range" id="sim6-slider" min="0" max="3" step="1" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1 font-mono">
+                            <span>1.0</span><span>0.5</span><span>0.2</span><span>0.05</span>
+                        </div>
+                    </div>
+                    <canvas id="sim6Canvas" width="600" height="300"></canvas>
+                </div>
+
+                <h3>Why Extremely Small Steps Are Not Always Better</h3>
+                <p>यदि step अत्यधिक छोटा हो, तो floating-point rounding तथा subtraction cancellation errors dominate कर सकते हैं। इसलिए वास्तविक question यह बनता है:</p>
+                <div class="boxed-statement">कौन-सा finite scale practically optimal है?</div>
+            </section>
+
+            <!-- Chapter 9 -->
+            <section id="ch-9" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 9: Finite Differences और Scientific Computation</h2>
+                <div class="boxed-statement">Finite differences are the operational language of computation</div>
+
+                <h3>Central Difference Approximation</h3>
+                <p>Practical numerical computation में हम वास्तव में forward finite difference या central difference calculate करते हैं: \(f'(x) \approx \frac{f(x+h)-f(x-h)}{2h}\)। यह exact derivative देता है (quadratics के लिए) और errors partially cancel हो जाते हैं।</p>
+
+                <h3>Second Derivatives and Wave/Heat Equations</h3>
+                <p>Finite difference approximation for \(\frac{d^2y}{dx^2}\) is \(\frac{y_{n+1}-2y_n+y_{n-1}}{h^2}\)। यह expression wave equations तथा heat equations में central role निभाता है।</p>
+
+                <!-- Sim 7 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 7: 1D Heat Diffusion (Finite Differences)</h4>
+                    <p class="text-sm text-gray-600 mb-4">Using finite differences $T_i^{new} = T_i + \alpha (T_{i+1} - 2T_i + T_{i-1})$ to simulate heat diffusing through a rod.</p>
+                    <canvas id="sim7Canvas" width="600" height="200"></canvas>
+                    <button onclick="resetHeat()" class="mt-4 bg-gray-200 px-4 py-2 rounded text-sm hover:bg-gray-300">Reset Heat Spike</button>
+                </div>
+
+                <h3>Discrete-to-Continuous Bridge</h3>
+                <p>Finite difference methods discrete तथा continuous mathematics के बीच bridge बनाती हैं। Discrete local computations collectively continuous large-scale behavior produce करती हैं।</p>
+            </section>
+
+            <!-- Chapter 10 -->
+            <section id="ch-10" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 10: Calculus, Approximation और Modeling</h2>
+                <div class="boxed-statement">Calculus is fundamentally a theory of stable approximation.</div>
+
+                <h3>Exactness बनाम Stabilization</h3>
+                <p>Practical science में वास्तविक प्रश्न सामान्यतः यह होता है: <strong>किस scale पर approximation sufficiently stable है?</strong></p>
+
+                <h3>Error as a Central Concept</h3>
+                <p>Scientific computation में error unavoidable तथा fundamental concept है। वास्तविक प्रश्न यह होता है: <strong>क्या error controlled है?</strong></p>
+
+                <h3>Local-to-Global Structure</h3>
+                <div class="boxed-statement">global behavior local structures से emerge करता है</div>
+                <p>Derivative local change को describe करती है। Integration उन्हीं local changes का total accumulation है। Differential equations local evolution laws हैं।</p>
+                
+                <ul class="list-disc pl-8 space-y-2 mt-4 mb-8 text-lg text-gray-700">
+                    <li><strong>Derivative:</strong> stabilized local rate</li>
+                    <li><strong>Integration:</strong> accumulated local change</li>
+                    <li><strong>Differential equation:</strong> local evolution law</li>
+                    <li><strong>Finite difference:</strong> computational local approximation</li>
+                    <li><strong>Numerical method:</strong> iterative controlled evolution</li>
+                </ul>
+            </section>
+
+            <!-- Chapter 11-15 -->
+            <section id="ch-11-15" class="chapter-content">
+                <h2 class="text-4xl font-bold text-chapterblue ch-title-border">अध्याय 11-15: Computational Traditions & Functions</h2>
+                
+                <h3>Difference Tables और Aryabhata</h3>
+                <p>भारतीय computational tradition में sine tables तथा difference tables अत्यन्त महत्वपूर्ण थे। आर्यभट्ट ने कई स्थानों पर actual values की तुलना में differences को अधिक operational महत्व दिया।</p>
+                <div class="boxed-statement">यदि differences ज्ञात हों, तो values पुनर्निर्मित की जा सकती हैं।</div>
+
+                <h3>Second Difference Structure</h3>
+                <p>यदि second differences original values के negative proportional हों: \(\frac{d^2y}{dx^2}=-y\), तो oscillatory structure emerge होती है। यही sine तथा cosine functions का foundational differential relation है।</p>
+
+                <!-- Sim 8 -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-8 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 8: Harmonic Oscillator ($\frac{d^2y}{dx^2} = -y$)</h4>
+                    <p class="text-sm text-gray-600 mb-4">Using Euler method for 2nd order equation: $\Delta v = -y\Delta t$, and $\Delta y = v\Delta t$. Notice how this simple local rule generates a perfect global sine wave.</p>
+                    <canvas id="sim8Canvas" width="600" height="200"></canvas>
+                </div>
+
+                <h3>Differential Equations से Functions का निर्माण</h3>
+                <div class="boxed-statement">Function का exact form कठिन हो सकता है, लेकिन उसके differences का नियम सरल हो सकता है।</div>
+                <p>Sine, cosine और exponential functions को केवल geometric curves की तरह नहीं बल्कि local evolution laws के solutions की तरह समझा जा सकता है।</p>
+
+                <h3>Scientific Computation और Modern Perspective</h3>
+                <p>Modern computers actual infinitesimals का उपयोग नहीं करते। वे finite differences, finite grids तथा repeated local updates का उपयोग करते हैं। Derivative stabilized finite difference का idealized representation है।</p>
+            </section>
+
+            <!-- Conclusion -->
+            <section id="ch-conclusion" class="chapter-content">
+                <div class="text-center mt-10 mb-16">
+                    <h1 class="text-5xl font-bold text-chapterblue mb-8">समापन</h1>
+                    <div class="w-32 h-1 bg-goldline mx-auto mb-10"></div>
+                </div>
+
+                <p>इस पुस्तक की पूरी यात्रा में हमने calculus को केवल symbolic manipulation या formal limit theory के रूप में नहीं, बल्कि change, approximation, stabilization और computation की एक unified language के रूप में समझने का प्रयास किया।</p>
+                
+                <p>Supercomputers infinitesimals पर नहीं चलते। वे finite approximations, iterative corrections तथा stabilized numerical structures पर कार्य करते हैं।</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-100 text-center flex items-center justify-center min-h-[100px]">
+                        <p class="font-bold text-xl text-chapterblue m-0">Derivative is stabilized local change.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-100 text-center flex items-center justify-center min-h-[100px]">
+                        <p class="font-bold text-xl text-chapterblue m-0">Integration is accumulated stabilized change.</p>
+                    </div>
+                </div>
+
+                <div class="boxed-statement !bg-chapterblue !text-white !border-goldline !text-2xl !max-w-full !py-8">
+                    Calculus is the mathematics of controlled approximation.
+                </div>
+
+                <div class="mt-20 text-center">
+                    <div class="text-3xl text-goldline mb-6 tracking-[1em] opacity-80">♦♦♦</div>
+                    <p class="text-2xl text-gray-800 mb-6 font-bold">Calculus local change और stabilization की scientific language है।</p>
+                    <p class="text-xl font-bold text-chapterblue uppercase tracking-widest mt-8">Abhishek Kumar</p>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+
+    <script>
+        // Data Structure for Chapters Navigation
+        const chapters = [
+            { id: 0, title: "Cover Page", label: "Cover", htmlId: "ch-0" },
+            { id: 1, title: "प्रस्तावना", label: "अध्याय 1", htmlId: "ch-1" },
+            { id: 2, title: "अंतर अनुपात और Stabilization", label: "अध्याय 2", htmlId: "ch-2" },
+            { id: 3, title: "तात्क्षणिक चाल और Local Change", label: "अध्याय 3", htmlId: "ch-3" },
+            { id: 4, title: "Differentials & Algebraic Manipulation", label: "अध्याय 4", htmlId: "ch-4" },
+            { id: 5, title: "Pressure, Continuum Physics...", label: "अध्याय 5", htmlId: "ch-5" },
+            { id: 6, title: "Differential Equations & Numerical", label: "अध्याय 6", htmlId: "ch-6" },
+            { id: 7, title: "संचय के रूप में Integration", label: "अध्याय 7", htmlId: "ch-7" },
+            { id: 8, title: "Euler Method & Iterative Approx", label: "अध्याय 8", htmlId: "ch-8" },
+            { id: 9, title: "Finite Differences & Computation", label: "अध्याय 9", htmlId: "ch-9" },
+            { id: 10, title: "Calculus, Approximation & Modeling", label: "अध्याय 10", htmlId: "ch-10" },
+            { id: 11, title: "Difference Tables & Functions", label: "अध्याय 11-15", htmlId: "ch-11-15" },
+            { id: 'conclusion', title: "समापन", label: "समापन", htmlId: "ch-conclusion" }
+        ];
+
+        // Generate Navigation
+        const navContainer = document.getElementById('nav-links');
+        chapters.forEach(ch => {
+            const btn = document.createElement('button');
+            btn.className = `w-full text-left px-4 py-3 rounded mb-1 transition-colors hover:bg-gray-100 nav-btn group border-r-4 border-transparent`;
+            btn.id = `nav-btn-${ch.id}`;
+            btn.onclick = () => switchChapter(ch.id);
+            btn.innerHTML = `<span class="block text-xs font-bold text-goldline mb-1 uppercase tracking-wider">${ch.label}</span>
+                             <span class="block text-sm font-semibold text-gray-700 group-hover:text-chapterblue">${ch.title}</span>`;
+            navContainer.appendChild(btn);
+        });
+
+        // UI Logic for Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        let isSidebarOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isSidebarOpen = !isSidebarOpen;
+            if(isSidebarOpen) {
+                sidebar.classList.remove('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        function switchChapter(id) {
+            document.querySelectorAll('.chapter-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active-nav'));
+
+            const chData = chapters.find(c => c.id === id);
+            document.getElementById(chData.htmlId).classList.add('active');
+            
+            const activeBtn = document.getElementById(`nav-btn-${id}`);
+            if(activeBtn) activeBtn.classList.add('active-nav');
+
+            if(window.innerWidth < 768 && isSidebarOpen) {
+                sidebar.classList.add('-translate-x-full');
+                isSidebarOpen = false;
+            }
+            document.getElementById('main-content').scrollTo(0,0);
+        }
+
+        /* ---------------------------------------------------------
+           SIMULATIONS JAVASCRIPT
+           --------------------------------------------------------- */
+        
+        // Sim 0: Cover Curve
+        function drawCover() {
+            const canvas = document.getElementById('coverCanvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0,0,w,h);
+            
+            ctx.beginPath();
+            ctx.moveTo(0, h/2);
+            ctx.strokeStyle = '#B08D2F';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.lineTo(w, h/2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#1F3A6D';
+            ctx.lineWidth = 3;
+            for(let x=0; x<w; x++) {
+                let mathX = (x / w) * 8; 
+                let mathY = Math.exp(-0.18 * mathX) * Math.sin(3 * mathX);
+                let canvasY = h/2 - (mathY * h/2.5);
+                if(x===0) ctx.moveTo(x, canvasY);
+                else ctx.lineTo(x, canvasY);
+            }
+            ctx.stroke();
+        }
+
+        // Sim 1: Stabilization (x^2)
+        function initSim1() {
+            const slider = document.getElementById('sim1-slider');
+            slider.addEventListener('input', (e) => {
+                let raw = parseFloat(e.target.value);
+                let dx = Math.pow(10, raw); // Map to 0.001 to 1.0
+                let ratio = (Math.pow(2 + dx, 2) - 4) / dx;
+                document.getElementById('sim1-dx-val').innerText = dx.toFixed(3);
+                document.getElementById('sim1-ratio').innerText = ratio.toFixed(4);
+                let msg = document.getElementById('sim1-msg');
+                if(dx < 0.05) msg.innerText = "Quotient is highly stabilized around 4.00";
+                else if (dx < 0.5) msg.innerText = "Quotient is stabilizing...";
+                else msg.innerText = "Quotient is far from stabilized.";
+            });
+        }
+
+        // Sim 2: Secant to Tangent
+        function drawSim2() {
+            const canvas = document.getElementById('sim2Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0,0,w,h);
+
+            const dx = parseFloat(document.getElementById('sim2-slider').value);
+            document.getElementById('sim2-dx-val').innerText = dx.toFixed(2);
+            
+            const x0 = 2, y0 = x0*x0;
+            const x1 = x0 + dx, y1 = x1*x1;
+            const slope = (y1 - y0) / dx;
+
+            const mapX = (x) => 20 + ((x - 0) / 5) * (w - 40);
+            const mapY = (y) => h - 20 - ((y - 0) / 25) * (h - 40);
+
+            // Curve
+            ctx.beginPath(); ctx.strokeStyle = '#d1d5db'; ctx.lineWidth = 4;
+            for(let x=0; x<=5; x+=0.1) {
+                if(x===0) ctx.moveTo(mapX(x), mapY(x*x));
+                else ctx.lineTo(mapX(x), mapY(x*x));
+            }
+            ctx.stroke();
+
+            // Secant
+            ctx.beginPath(); ctx.strokeStyle = '#B08D2F'; ctx.lineWidth = 2;
+            const lineStartX = 0, lineStartY = y0 - slope * (x0 - lineStartX);
+            const lineEndX = 5, lineEndY = y0 + slope * (lineEndX - x0);
+            ctx.moveTo(mapX(lineStartX), mapY(lineStartY));
+            ctx.lineTo(mapX(lineEndX), mapY(lineEndY));
+            ctx.stroke();
+
+            // Points
+            ctx.fillStyle = '#1F3A6D';
+            ctx.beginPath(); ctx.arc(mapX(x0), mapY(y0), 5, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(mapX(x1), mapY(y1), 5, 0, Math.PI*2); ctx.fill();
+        }
+
+        // Sim 3: Pressure Decay
+        function drawSim3() {
+            const canvas = document.getElementById('sim3Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            let p = 100, a = 0.1, dy = 1;
+            const points = [];
+            for(let y=0; y<=30; y+=dy) {
+                points.push({y: y, p: p});
+                p = p - a * p * dy; 
+            }
+            const mapX = (y) => 20 + (y / 30) * (w - 40);
+            const mapY = (p) => h - 20 - (p / 100) * (h - 40);
+
+            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 3;
+            points.forEach((pt, i) => { i===0 ? ctx.moveTo(mapX(pt.y), mapY(pt.p)) : ctx.lineTo(mapX(pt.y), mapY(pt.p)); });
+            ctx.stroke();
+            ctx.lineTo(mapX(30), h-20); ctx.lineTo(mapX(0), h-20);
+            ctx.fillStyle = 'rgba(31, 58, 109, 0.1)'; ctx.fill();
+        }
+
+        // Sim 4: Cooling
+        function drawSim4() {
+            const canvas = document.getElementById('sim4Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            let T = 100, Ts = 20, k = 0.1, dt = 0.5;
+            const points = [];
+            for(let t=0; t<=50; t+=dt) {
+                points.push({t: t, T: T});
+                T = T - k * (T - Ts) * dt; 
+            }
+            const mapX = (t) => 20 + (t / 50) * (w - 40);
+            const mapY = (T) => h - 20 - (T / 100) * (h - 40);
+
+            // Ambient line
+            ctx.beginPath(); ctx.strokeStyle = '#B08D2F'; ctx.setLineDash([5,5]);
+            ctx.moveTo(mapX(0), mapY(Ts)); ctx.lineTo(mapX(50), mapY(Ts)); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Curve
+            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 3;
+            points.forEach((pt, i) => { i===0 ? ctx.moveTo(mapX(pt.t), mapY(pt.T)) : ctx.lineTo(mapX(pt.t), mapY(pt.T)); });
+            ctx.stroke();
+        }
+
+        // Sim 5: Riemann Sum
+        function drawSim5() {
+            const canvas = document.getElementById('sim5Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0,0,w,h);
+
+            const n = parseInt(document.getElementById('sim5-slider').value);
+            document.getElementById('sim5-n-val').innerText = n;
+            const f = (x) => -x*x + 4;
+            const xMin = -2, xMax = 2;
+            const mapX = (x) => 20 + ((x - xMin) / (xMax - xMin)) * (w - 40);
+            const mapY = (y) => h - 20 - (y / 4.5) * (h - 40);
+
+            ctx.strokeStyle = '#ccc'; ctx.beginPath(); ctx.moveTo(mapX(xMin), mapY(0)); ctx.lineTo(mapX(xMax), mapY(0)); ctx.stroke();
+
+            const dx = (xMax - xMin) / n;
+            let area = 0;
+            ctx.fillStyle = 'rgba(176, 141, 47, 0.4)'; ctx.strokeStyle = '#B08D2F'; ctx.lineWidth = 1;
+
+            for(let i=0; i<n; i++) {
+                let rectX = xMin + i*dx, midX = rectX + dx/2, rectY = f(midX);
+                let cx = mapX(rectX), cy = mapY(rectY), cw = mapX(rectX+dx) - cx, ch = mapY(0) - cy;
+                ctx.fillRect(cx, cy, cw, ch); ctx.strokeRect(cx, cy, cw, ch);
+                area += rectY * dx;
+            }
+            document.getElementById('sim5-area').innerText = area.toFixed(3);
+
+            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 3;
+            for(let x=xMin; x<=xMax; x+=0.05) { x===xMin ? ctx.moveTo(mapX(x), mapY(f(x))) : ctx.lineTo(mapX(x), mapY(f(x))); }
+            ctx.stroke();
+        }
+
+        // Sim 6: Euler Method e^x
+        function drawSim6() {
+            const canvas = document.getElementById('sim6Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0,0,w,h);
+
+            const xMax = 4, yMax = Math.exp(0.5 * xMax), k = 0.5;
+            const mapX = (x) => 40 + (x / xMax) * (w - 80);
+            const mapY = (y) => h - 20 - (y / yMax) * (h - 40);
+
+            // Exact Curve
+            ctx.beginPath(); ctx.strokeStyle = '#d1d5db'; ctx.lineWidth = 4;
+            for(let x=0; x<=xMax; x+=0.05) { x===0 ? ctx.moveTo(mapX(x), mapY(Math.exp(k*x))) : ctx.lineTo(mapX(x), mapY(Math.exp(k*x))); }
+            ctx.stroke();
+
+            // Euler Steps
+            const sliderVals = [1.0, 0.5, 0.2, 0.05];
+            const hStep = sliderVals[parseInt(document.getElementById('sim6-slider').value)];
+            document.getElementById('sim6-h-val').innerText = hStep.toFixed(2);
+            
+            let currX = 0, currY = 1;
+            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 2; ctx.moveTo(mapX(currX), mapY(currY));
+            const pts = [[currX, currY]];
+
+            while(currX < xMax) {
+                let nextY = currY + (hStep * k * currY), nextX = currX + hStep;
+                if(nextX > xMax) { ctx.lineTo(mapX(xMax), mapY(currY + ((xMax - currX) * k * currY))); break; }
+                ctx.lineTo(mapX(nextX), mapY(nextY));
+                pts.push([nextX, nextY]);
+                currX = nextX; currY = nextY;
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#B08D2F';
+            pts.forEach(p => { ctx.beginPath(); ctx.arc(mapX(p[0]), mapY(p[1]), 4, 0, Math.PI*2); ctx.fill(); });
+        }
+
+        // Sim 7: 1D Heat Equation
+        let heatArray = new Array(50).fill(20);
+        let heatTimer;
+        function drawSim7() {
+            const canvas = document.getElementById('sim7Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const alpha = 0.4;
+
+            function step() {
+                let nextArray = [...heatArray];
+                for(let i=1; i<49; i++) {
+                    nextArray[i] = heatArray[i] + alpha * (heatArray[i+1] - 2*heatArray[i] + heatArray[i-1]);
+                }
+                heatArray = nextArray;
+                
+                ctx.clearRect(0,0,w,h);
+                ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 3;
+                heatArray.forEach((temp, i) => {
+                    let x = (i/49)*w;
+                    let y = h - (temp/100)*h;
+                    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+                });
+                ctx.stroke();
+                heatTimer = requestAnimationFrame(step);
+            }
+            if(!heatTimer) step();
+        }
+        function resetHeat() {
+            heatArray.fill(20);
+            for(let i=20; i<30; i++) heatArray[i] = 100; // spike
+        }
+
+        // Sim 8: Harmonic Oscillator
+        function drawSim8() {
+            const canvas = document.getElementById('sim8Canvas');
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const dt = 0.05, tMax = 15;
+            let y = 0, v = 1; 
+            
+            const mapT = (t) => 20 + (t / tMax) * (w - 40);
+            const mapY = (val) => h/2 - (val / 1.5) * (h/2 - 20);
+
+            ctx.strokeStyle = '#ccc'; ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+
+            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 2; ctx.moveTo(mapT(0), mapY(y));
+            for(let t=0; t<=tMax; t+=dt) {
+                let y_new = y + v * dt;
+                let v_new = v - y * dt; // a = -y
+                ctx.lineTo(mapT(t), mapY(y_new));
+                y = y_new; v = v_new;
+            }
+            ctx.stroke();
+        }
+
+        // Initialize
+        window.onload = () => {
+            switchChapter(0);
+            drawCover();
+            initSim1();
+            document.getElementById('sim2-slider').addEventListener('input', drawSim2); drawSim2();
+            drawSim3();
+            drawSim4();
+            document.getElementById('sim5-slider').addEventListener('input', drawSim5); drawSim5();
+            document.getElementById('sim6-slider').addEventListener('input', drawSim6); drawSim6();
+            resetHeat(); drawSim7();
+            drawSim8();
+        };
+    </script>
+</body>
+</html>
