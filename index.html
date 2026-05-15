@@ -2498,7 +2498,623 @@
                 <p>के बीच conceptual bridge निर्मित किया जाए।</p>
                 <p>यदि reader calculus को केवल formulas के collection की तरह नहीं बल्कि local change, stabilization, accumulation तथा computational evolution की language की तरह देखना प्रारम्भ करे, तो इस पुस्तक का उद्देश्य सफल माना जाएगा।</p>
             </section>
+                <section id="ch-16" class="chapter-content">
+                <h2 class="ch-title-border">अध्याय 16: Electric Field as Accumulated Local Interaction</h2>
+                
+                <p>Electric field वास्तव में local interactions के accumulation की mathematical language है। यदि किसी charge distribution को tiny local pieces में divide किया जाए, तो प्रत्येक local charge element अपने आसपास electric influence उत्पन्न करता है। पूरा electric field उन्हीं infinitesimal contributions के stabilized accumulation से बनता है।</p>
 
+                <div class="boxed-statement">Electric Field = Accumulated Local Charge Influence</div>
+
+                <p>Electrostatics में calculus का central role इसी local-to-global accumulation philosophy के कारण है。</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.1 Coulomb Law और Local Field Contribution</h3>
+
+                <p>Point charge $Q$ के कारण distance $r$ पर electric field:</p>
+                $$ \vec E = \frac{1}{4\pi\epsilon_0} \frac{Q}{r^2}\hat r $$
+                <p>होती है।</p>
+
+                <p>यहाँ:</p>
+                <ul class="list-disc pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>field radial है,</li>
+                    <li>magnitude inverse-square law follow करती है,</li>
+                    <li>local interaction distance के साथ weaken होता है।</li>
+                </ul>
+
+                <p>यदि charge distribution continuous हो, तो प्रत्येक tiny element:</p>
+                $$ dq $$
+                <p>अपना infinitesimal field produce करेगा:</p>
+                $$ d\vec E = \frac{1}{4\pi\epsilon_0} \frac{dq}{r^2}\hat r. $$
+
+                <p>अब पूरा field:</p>
+                $$ \vec E = \int d\vec E $$
+                <p>से प्राप्त होगा।</p>
+
+                <p>यही electrostatic integration की fundamental philosophy है।</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.2 Electric Field of a Ring of Charge</h3>
+
+                <p>अब radius $R$ की uniformly charged ring लें।</p>
+                <p>Total charge:</p>
+                $$ Q. $$
+                <p>हमें axis पर distance $z$ पर electric field ज्ञात करनी है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Symmetry Analysis</h4>
+                <p>Ring के प्रत्येक charge element का opposite element मौजूद है।</p>
+                <p>Opposite elements के horizontal components cancel हो जाते हैं।</p>
+                <p>केवल axial component survive करता है।</p>
+                <p>अतः net field केवल $z$-direction में होगी।</p>
+
+                <div class="boxed-statement">Symmetry removes transverse complexity</div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Local Contribution</h4>
+                <p>Ring के small element:</p>
+                $$ dq $$
+                <p>का point $P$ पर field magnitude:</p>
+                $$ dE = \frac{1}{4\pi\epsilon_0} \frac{dq}{r^2} $$
+                <p>जहाँ:</p>
+                $$ r=\sqrt{z^2+R^2}. $$
+
+                <p>अब axial component:</p>
+                $$ dE_z=dE\cos\theta. $$
+
+                <p>Geometry से:</p>
+                $$ \cos\theta = \frac{z}{\sqrt{z^2+R^2}}. $$
+
+                <p>इसलिए:</p>
+                $$ dE_z = \frac{1}{4\pi\epsilon_0} \frac{dq}{z^2+R^2} \cdot \frac{z}{\sqrt{z^2+R^2}}. $$
+                $$ dE_z = \frac{1}{4\pi\epsilon_0} \frac{z\,dq}{(z^2+R^2)^{3/2}}. $$
+
+                <p>अब पूरा field:</p>
+                $$ E_z = \int dE_z. $$
+
+                <p>चूँकि बाकी terms constant हैं:</p>
+                $$ E_z = \frac{1}{4\pi\epsilon_0} \frac{z}{(z^2+R^2)^{3/2}} \int dq. $$
+                <p>और:</p>
+                $$ \int dq=Q. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E_z = \frac{1}{4\pi\epsilon_0} \frac{zQ}{(z^2+R^2)^{3/2}} $$
+                </div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Limiting Cases</h4>
+                <p>यदि:</p>
+                $$ z\gg R, $$
+                <p>तो:</p>
+                $$ (z^2+R^2)^{3/2}\approx z^3. $$
+
+                <p>अतः:</p>
+                $$ E_z \approx \frac{1}{4\pi\epsilon_0} \frac{Q}{z^2}. $$
+                <p>Large distance पर ring point charge की तरह behave करती है।</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.3 Electric Field of a Disk of Charge</h3>
+
+                <p>अब uniformly charged disk लें।</p>
+                <p>Radius:</p>
+                $$ R. $$
+                <p>Surface charge density:</p>
+                $$ \eta = \frac{Q}{\pi R^2}. $$
+                <p>हमें axis पर field ज्ञात करनी है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Disk को Rings में Divide करना</h4>
+                <p>Disk directly integrate करना कठिन है।</p>
+                <p>लेकिन हम जानते हैं कि ring का field पहले से ज्ञात है।</p>
+                <p>इसलिए disk को narrow rings में divide करते हैं।</p>
+
+                <p>Ring radius:</p>
+                $$ r. $$
+                <p>Thickness:</p>
+                $$ dr. $$
+                <p>Ring area:</p>
+                $$ dA=2\pi r\,dr. $$
+
+                <p>इसलिए ring charge:</p>
+                $$ dq=\eta dA. $$
+                $$ dq=2\pi\eta r\,dr. $$
+
+                <p>अब ring field formula:</p>
+                $$ dE_z = \frac{1}{4\pi\epsilon_0} \frac{z\,dq}{(z^2+r^2)^{3/2}}. $$
+
+                <p>Substitute करें:</p>
+                $$ dE_z = \frac{1}{4\pi\epsilon_0} \frac{z(2\pi\eta r\,dr)}{(z^2+r^2)^{3/2}}. $$
+                $$ dE_z = \frac{\eta z}{2\epsilon_0} \frac{r\,dr}{(z^2+r^2)^{3/2}}. $$
+
+                <p>अब integrate करें:</p>
+                $$ E_z = \frac{\eta z}{2\epsilon_0} \int_0^R \frac{r\,dr}{(z^2+r^2)^{3/2}}. $$
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Variable Substitution</h4>
+                <p>Substitution लें:</p>
+                $$ u=z^2+r^2. $$
+                <p>तब:</p>
+                $$ du=2r\,dr. $$
+                $$ r\,dr=\frac12 du. $$
+
+                <p>Limits बदलें:</p>
+                $$ r=0 \Rightarrow u=z^2, $$
+                $$ r=R \Rightarrow u=z^2+R^2. $$
+
+                <p>अब integral:</p>
+                $$ E_z = \frac{\eta z}{2\epsilon_0} \cdot \frac12 \int_{z^2}^{z^2+R^2} u^{-3/2}du. $$
+
+                <p>Integration:</p>
+                $$ \int u^{-3/2}du = -\frac2{\sqrt u}. $$
+
+                <p>अतः:</p>
+                $$ E_z = \frac{\eta z}{4\epsilon_0} \left[ -\frac2{\sqrt u} \right]_{z^2}^{z^2+R^2}. $$
+                $$ E_z = \frac{\eta z}{2\epsilon_0} \left( \frac1z - \frac1{\sqrt{z^2+R^2}} \right). $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E_z = \frac{\eta}{2\epsilon_0} \left( 1- \frac{z}{\sqrt{z^2+R^2}} \right) $$
+                </div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.4 Limiting Cases of Disk Field</h3>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Very Far Away: $z\gg R$</h4>
+                <p>अब:</p>
+                $$ \frac{R^2}{z^2}\ll1. $$
+
+                <p>Binomial approximation:</p>
+                $$ (1+x)^n \approx 1+nx $$
+                <p>का उपयोग करें।</p>
+
+                $$ \sqrt{z^2+R^2} = z\sqrt{1+\frac{R^2}{z^2}}. $$
+                $$ \frac{z}{\sqrt{z^2+R^2}} = \left( 1+\frac{R^2}{z^2} \right)^{-1/2}. $$
+
+                <p>Approximation:</p>
+                $$ \left( 1+\frac{R^2}{z^2} \right)^{-1/2} \approx 1-\frac12\frac{R^2}{z^2}. $$
+
+                <p>इसलिए:</p>
+                $$ 1- \frac{z}{\sqrt{z^2+R^2}} \approx \frac{R^2}{2z^2}. $$
+
+                <p>अब:</p>
+                $$ E_z \approx \frac{\eta}{2\epsilon_0} \frac{R^2}{2z^2}. $$
+                <p>और:</p>
+                $$ \eta=\frac{Q}{\pi R^2}. $$
+
+                <p>अतः:</p>
+                $$ E_z \approx \frac1{4\pi\epsilon_0} \frac{Q}{z^2}. $$
+                <p>यानी disk भी far distance पर point charge बन जाती है।</p>
+
+                <div class="boxed-statement">Far-distance observation smooths geometry</div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.5 Infinite Plane of Charge</h3>
+                <p>अब:</p>
+                $$ R\to\infty. $$
+                <p>तब:</p>
+                $$ \frac{z}{\sqrt{z^2+R^2}} \to0. $$
+
+                <p>इसलिए:</p>
+                <div class="boxed-statement">
+                    $$ E_{\text{plane}} = \frac{\eta}{2\epsilon_0} $$
+                </div>
+                <p>यह field distance पर depend नहीं करती। यह translational symmetry का consequence है।</p>
+
+                <div class="chapter-end-rule"></div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.6 Gauss Law and Symmetry-Based Field Computation</h3>
+                <p>Gauss law वास्तव में accumulated electric flux का law है।</p>
+
+                <div class="boxed-statement">
+                    $$ \oint \vec E\cdot d\vec A = \frac{Q_{\text{in}}}{\epsilon_0} $$
+                </div>
+
+                <p>यहाँ:</p>
+                $$ d\Phi=\vec E\cdot d\vec A $$
+                <p>local flux contribution है।</p>
+
+                <p>Entire surface integration global flux देता है।</p>
+                <div class="boxed-statement">Global Flux = Accumulated Local Field Flow</div>
+
+                <p>Gauss law विशेष रूप से तब useful होती है जब strong symmetry उपस्थित हो।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Field Outside a Sphere</h4>
+                <p>Radius:</p>
+                $$ R, $$
+                <p>total charge:</p>
+                $$ Q. $$
+                <p>Gaussian sphere radius:</p>
+                $$ r>R. $$
+
+                <p>Symmetry से field everywhere same magnitude की होगी। और radial होगी।</p>
+                <p>अतः:</p>
+                $$ \Phi_E = E(4\pi r^2). $$
+
+                <p>Enclosed charge:</p>
+                $$ Q_{\text{in}}=Q. $$
+
+                <p>Gauss law:</p>
+                $$ E(4\pi r^2) = \frac{Q}{\epsilon_0}. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E = \frac1{4\pi\epsilon_0} \frac{Q}{r^2} $$
+                </div>
+                <p>Sphere बाहर से point charge की तरह behave करती है。</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Field Inside a Uniform Sphere</h4>
+                <p>अब:</p>
+                $$ r<R. $$
+                <p>Uniform volume charge density:</p>
+                $$ \rho = \frac{Q}{\frac43\pi R^3}. $$
+
+                <p>अब enclosed charge:</p>
+                $$ Q_{\text{in}} = \rho\frac43\pi r^3. $$
+                $$ Q_{\text{in}} = Q\frac{r^3}{R^3}. $$
+
+                <p>Gauss law:</p>
+                $$ E(4\pi r^2) = \frac{Q_{\text{in}}}{\epsilon_0}. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E = \frac1{4\pi\epsilon_0} \frac{Qr}{R^3} $$
+                </div>
+                <p>Field center से linearly बढ़ती है। यह local accumulation का direct consequence है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Field of an Infinite Charged Wire</h4>
+                <p>Linear charge density:</p>
+                $$ \lambda. $$
+                <p>Gaussian cylinder radius:</p>
+                $$ r, $$
+                <p>length:</p>
+                $$ L. $$
+
+                <p>Curved surface पर field constant है। Cylinder caps पर flux zero है।</p>
+                <p>इसलिए:</p>
+                $$ \Phi_E = E(2\pi rL). $$
+
+                <p>Enclosed charge:</p>
+                $$ Q_{\text{in}}=\lambda L. $$
+
+                <p>Gauss law:</p>
+                $$ E(2\pi rL) = \frac{\lambda L}{\epsilon_0}. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E = \frac{\lambda}{2\pi\epsilon_0 r} $$
+                </div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Field of an Infinite Plane using Gauss Law</h4>
+                <p>Surface charge density:</p>
+                $$ \eta. $$
+                <p>Gaussian cylinder (pillbox) लें।</p>
+                <p>दोनों flat faces area:</p>
+                $$ A. $$
+
+                <p>Field दोनों sides perpendicular है। Wall पर flux zero है।</p>
+                <p>Total flux:</p>
+                $$ \Phi_E=2EA. $$
+
+                <p>Enclosed charge:</p>
+                $$ Q_{\text{in}}=\eta A. $$
+
+                <p>Gauss law:</p>
+                $$ 2EA = \frac{\eta A}{\epsilon_0}. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E = \frac{\eta}{2\epsilon_0} $$
+                </div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Why Gauss Law Works</h4>
+                <p>Gauss law हर problem में useful नहीं होती। यह केवल highly symmetric systems में extraordinary simplification देती है।</p>
+                <p>जैसे:</p>
+                <ul class="list-disc pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>sphere,</li>
+                    <li>cylinder,</li>
+                    <li>infinite plane.</li>
+                </ul>
+
+                <p>इन cases में:</p>
+                <ul class="list-disc pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>field magnitude surface पर constant होती है,</li>
+                    <li>direction symmetry से ज्ञात होती है,</li>
+                    <li>flux integration सरल हो जाता है।</li>
+                </ul>
+
+                <div class="boxed-statement">Symmetry converts difficult integration into geometry</div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Computational Philosophy</h4>
+                <p>इन सभी derivations में repeatedly एक common structure उपस्थित है:</p>
+                <ol>
+                    <li>local element identify करो,</li>
+                    <li>local contribution लिखो,</li>
+                    <li>symmetry analyze करो,</li>
+                    <li>cancellation identify करो,</li>
+                    <li>finite summation करो,</li>
+                    <li>continuum limit लेकर integral प्राप्त करो,</li>
+                    <li>stabilized global field प्राप्त करो।</li>
+                </ol>
+
+                <p>यानी:</p>
+                <div class="boxed-statement">Electrostatics = Accumulated Local Interaction Calculus</div>
+
+                <div class="chapter-end-rule"></div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">16.7 Electric Field, Symmetry और Local-to-Global Integration (विस्तृत)</h3>
+                <p>Electric field की computation calculus, symmetry, local contribution तथा accumulation philosophy का अत्यन्त सुंदर उदाहरण है। Electrostatics में हम बार-बार यह देखते हैं कि:</p>
+                
+                <div class="boxed-statement">global electric field = accumulation of local charge contributions</div>
+                
+                <p>यह chapter electric field की विभिन्न symmetric charge distributions के माध्यम से calculus की उसी computational philosophy को विस्तार से विकसित करता है जिसे हमने पूरी पुस्तक में repeatedly देखा है।</p>
+                
+                <p>विशेष रूप से हम निम्न ideas पर बल देंगे:</p>
+                <ol>
+                    <li>local charge elements,</li>
+                    <li>symmetry,</li>
+                    <li>finite summation,</li>
+                    <li>integral accumulation,</li>
+                    <li>stabilization,</li>
+                    <li>continuum approximation,</li>
+                    <li>limiting behavior.</li>
+                </ol>
+                <p>Electrostatics वास्तव में local-to-global integration का एक अत्यन्त concrete physical realization है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Point Charge से Continuous Charge तक</h4>
+                <p>Coulomb law कहती है कि point charge $Q$ के कारण distance $r$ पर electric field:</p>
+                $$ E = \frac{1}{4\pi\epsilon_0} \frac{Q}{r^2} $$
+                <p>होती है। Direction radial होती है।</p>
+                
+                <p>यदि charge distribution complicated हो, तो पूरा field अनेक tiny charge elements के combined contribution से उत्पन्न होता है। अर्थात:</p>
+                <div class="boxed-statement">continuous charge distribution = many tiny local charge elements</div>
+                
+                <p>यदि tiny element:</p>
+                $$ dq $$
+                <p>हो, तो उसका contribution:</p>
+                $$ dE = \frac{1}{4\pi\epsilon_0} \frac{dq}{r^2}. $$
+                
+                <p>अब total field प्राप्त करने के लिए सभी local contributions accumulate किए जाते हैं:</p>
+                $$ E = \int dE. $$
+                <p>यही electrostatics की integration philosophy है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Ring of Charge और Symmetry</h4>
+                <p>अब radius $R$ की uniformly charged ring लें। Total charge: $Q$.</p>
+                <p>हमें axis पर distance $z$ पर electric field ज्ञात करनी है।</p>
+                <p>Ring को tiny charge segments में divide करें: $\Delta Q_i$. हर segment field produce करेगा।</p>
+                
+                <p>लेकिन symmetry अत्यन्त महत्वपूर्ण है। Ring के opposite segments के transverse components cancel हो जाते हैं। केवल axial components survive करते हैं।</p>
+                
+                <p>यदि segment से point तक distance:</p>
+                $$ r_i = \sqrt{z^2+R^2}, $$
+                <p>तो:</p>
+                $$ \cos\theta_i = \frac{z}{\sqrt{z^2+R^2}}. $$
+                
+                <p>अब segment का axial field:</p>
+                $$ (E_i)_z = \frac{1}{4\pi\epsilon_0} \frac{\Delta Q_i}{r_i^2} \cos\theta_i. $$
+                <p>Substitute करने पर:</p>
+                $$ (E_i)_z = \frac{1}{4\pi\epsilon_0} \frac{z}{(z^2+R^2)^{3/2}} \Delta Q_i. $$
+                
+                <p>अब total field:</p>
+                $$ E_z = \sum_i (E_i)_z. $$
+                <p>चूँकि:</p>
+                $$ \frac{z}{(z^2+R^2)^{3/2}} $$
+                <p>constant है, इसलिए बाहर आ जाता है:</p>
+                $$ E_z = \frac{1}{4\pi\epsilon_0} \frac{z}{(z^2+R^2)^{3/2}} \sum_i \Delta Q_i. $$
+                <p>और:</p>
+                $$ \sum_i \Delta Q_i = Q. $$
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E_z = \frac{1}{4\pi\epsilon_0} \frac{zQ}{(z^2+R^2)^{3/2}} $$
+                </div>
+                <p>यह result अत्यन्त महत्वपूर्ण है क्योंकि यहाँ integration वास्तव में local charge accumulation की प्रक्रिया है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Disk of Charge</h4>
+                <p>अब uniformly charged disk लें। Radius: $R$, total charge: $Q$.</p>
+                <p>Surface charge density:</p>
+                $$ \eta = \frac{Q}{\pi R^2}. $$
+                
+                <p>अब disk को narrow rings में divide करें। Ring radius: $r_i$, $\Delta r$.</p>
+                <p>Ring area:</p>
+                $$ \Delta A_i = 2\pi r_i\Delta r. $$
+                <p>इसलिए ring charge:</p>
+                $$ \Delta Q_i = \eta \Delta A_i = 2\pi\eta r_i\Delta r. $$
+                
+                <p>अब ring field formula उपयोग करें:</p>
+                $$ (E_i)_z = \frac{1}{4\pi\epsilon_0} \frac{z\Delta Q_i}{(z^2+r_i^2)^{3/2}}. $$
+                <p>Substitute करने पर:</p>
+                $$ (E_i)_z = \frac{\eta z}{2\epsilon_0} \frac{r_i\Delta r}{(z^2+r_i^2)^{3/2}}. $$
+                
+                <p>अब सभी rings जोड़ें:</p>
+                $$ (E_{\text{disk}})_z = \frac{\eta z}{2\epsilon_0} \sum_i \frac{r_i\Delta r}{(z^2+r_i^2)^{3/2}}. $$
+                <p>Continuous refinement पर sum integral बन जाता है:</p>
+                $$ (E_{\text{disk}})_z = \frac{\eta z}{2\epsilon_0} \int_0^R \frac{r\,dr}{(z^2+r^2)^{3/2}}. $$
+                
+                <p>अब substitution लें:</p>
+                $$ u=z^2+r^2. $$
+                <p>तब:</p>
+                $$ du=2r\,dr. $$
+                <p>Integral solve करने पर:</p>
+                <div class="boxed-statement">
+                    $$ (E_{\text{disk}})_z = \frac{\eta}{2\epsilon_0} \left( 1- \frac{z}{\sqrt{z^2+R^2}} \right) $$
+                </div>
+                <p>यह disk का on-axis electric field है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Limiting Cases और Approximation</h4>
+                <p>अब limiting behavior देखें। यदि:</p>
+                $$ z\gg R, $$
+                <p>तो:</p>
+                $$ z^2+R^2 \approx z^2. $$
+                <p>अर्थात:</p>
+                $$ \sqrt{z^2+R^2} \approx z. $$
+                <p>Binomial approximation:</p>
+                $$ (1+x)^n \approx 1+nx $$
+                <p>का उपयोग करें। तब:</p>
+                $$ (E_{\text{disk}})_z \approx \frac{1}{4\pi\epsilon_0} \frac{Q}{z^2}. $$
+                <p>अर्थात large distance पर disk point charge की तरह behave करती है।</p>
+                <p>यह अत्यन्त deep physical idea है:</p>
+                <div class="boxed-statement">large-scale observation local structure को smooth कर देती है</div>
+                <p>यही continuum approximation तथा averaging की वही philosophy है जो हमने पूरी पुस्तक में repeatedly देखी।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Infinite Plane of Charge</h4>
+                <p>अब:</p>
+                $$ R\to\infty. $$
+                <p>Disk infinite plane बन जाती है। अब:</p>
+                $$ \frac{z}{\sqrt{z^2+R^2}} \to0. $$
+                <p>इसलिए:</p>
+                <div class="boxed-statement">
+                    $$ E_{\text{plane}} = \frac{\eta}{2\epsilon_0} $$
+                </div>
+                <p>अत्यन्त remarkable बात यह है कि field distance पर depend नहीं करती। यह symmetry का consequence है।</p>
+                <p>Infinite plane के लिए translational symmetry इतनी strong है कि local field constant हो जाती है।</p>
+                <div class="boxed-statement">infinite symmetry \Longrightarrow uniform field</div>
+                <p>यह local averaging तथा continuum idealization का एक अत्यन्त powerful example है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Sphere of Charge</h4>
+                <p>अब uniformly charged sphere लें। यदि:</p>
+                $$ r>R, $$
+                <p>तो पूरा sphere point charge की तरह behave करता है:</p>
+                <div class="boxed-statement">
+                    $$ E = \frac{1}{4\pi\epsilon_0} \frac{Q}{r^2} $$
+                </div>
+                <p>लेकिन sphere के अंदर situation different होती है। Gaussian surface radius:</p>
+                $$ r<R $$
+                <p>लेने पर enclosed charge:</p>
+                $$ Q_{\text{in}} = \rho \left( \frac{4}{3}\pi r^3 \right). $$
+                <p>जहाँ:</p>
+                $$ \rho = \frac{Q}{\frac43\pi R^3}. $$
+                <p>इसलिए:</p>
+                $$ Q_{\text{in}} = Q\frac{r^3}{R^3}. $$
+                <p>Gauss law:</p>
+                $$ E(4\pi r^2) = \frac{Q_{\text{in}}}{\epsilon_0}. $$
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E_{\text{inside}} = \frac{1}{4\pi\epsilon_0} \frac{Qr}{R^3} $$
+                </div>
+                <p>यहाँ field linearly increase करती है। यह result local accumulation का direct consequence है। जैसे-जैसे radius बढ़ती है, enclosed charge बढ़ती जाती है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Gauss Law as Stabilized Flux Averaging</h4>
+                <p>Gauss law:</p>
+                $$ \Phi_E = \oint \vec E\cdot d\vec A = \frac{Q_{\text{in}}}{\epsilon_0} $$
+                <p>वास्तव में local flux accumulation का law है।</p>
+                <p>Surface के tiny patches:</p>
+                $$ dA $$
+                <p>पर local flux contributions:</p>
+                $$ d\Phi = \vec E\cdot d\vec A $$
+                <p>accumulate होते हैं। Entire surface integration global flux देता है। यानी:</p>
+                <div class="boxed-statement">global flux = accumulated local field flow</div>
+                <p>यह integration की वही local-to-global philosophy है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Long Charged Wire</h4>
+                <p>अब infinitely long charged wire लें। Linear charge density: $\lambda$.</p>
+                <p>Gaussian cylinder radius: $r$, length: $L$.</p>
+                <p>अब symmetry से field radial होगी तथा curved surface पर constant होगी। Cylinder caps पर flux zero है।</p>
+                <p>केवल curved surface contribute करती है:</p>
+                $$ \Phi_E = E(2\pi rL). $$
+                <p>Enclosed charge:</p>
+                $$ Q_{\text{in}} = \lambda L. $$
+                <p>Gauss law:</p>
+                $$ E(2\pi rL) = \frac{\lambda L}{\epsilon_0}. $$
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    $$ E_{\text{wire}} = \frac{\lambda}{2\pi\epsilon_0 r} $$
+                </div>
+                <p>यहाँ again symmetry entire integration को extraordinarily simplify कर देती है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Computational Philosophy</h4>
+                <p>इन सभी examples में एक common structure repeatedly उभरती है:</p>
+                <ol>
+                    <li>tiny local contributions identify करो,</li>
+                    <li>symmetry analyze करो,</li>
+                    <li>cancellation determine करो,</li>
+                    <li>local quantities integrate करो,</li>
+                    <li>global field obtain करो।</li>
+                </ol>
+                <p>यानी electrostatics वास्तव में:</p>
+                <div class="boxed-statement">local-to-global accumulation physics</div>
+                <p>है।</p>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Numerical and Computational Viewpoint</h4>
+                <p>Modern computation में भी यही philosophy उपयोग होती है। Continuous charge distributions को tiny finite cells में divide किया जाता है। प्रत्येक cell local field contribution देता है। फिर numerical summation द्वारा approximate total field प्राप्त किया जाता है। यानी actual computation फिर finite approximation पर लौट आती है। इस प्रकार:</p>
+                <div class="boxed-statement">continuous field theory secretly finite accumulation theory है</div>
+
+                <h4 class="text-xl font-bold text-chapterblue mt-6 mb-3">Chapter Summary</h4>
+                <p>इस chapter में हमने देखा कि:</p>
+                <ol>
+                    <li>electric fields local charge contributions से उत्पन्न होते हैं,</li>
+                    <li>integration accumulated field contributions है,</li>
+                    <li>symmetry calculation को simplify करती है,</li>
+                    <li>Gauss law flux averaging का law है,</li>
+                    <li>continuum electrostatics local-to-global accumulation philosophy पर आधारित है।</li>
+                </ol>
+                <div class="boxed-statement">Electrostatics is accumulated local interaction mathematics.</div>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-10 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 13: Electric Field of a Charged Disk</h4>
+                    <p class="text-sm text-gray-600 mb-4">Observe how the electric field on the axis of a charged disk changes. As radius $R \to \infty$, it approaches an infinite plane (constant field). As $z \gg R$, it decays like a point charge ($1/z^2$).</p>
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-2">Disk Radius ($R$): <span id="sim13-r-val" class="text-chapterblue font-mono text-lg">5.0</span></label>
+                        <input type="range" id="sim13-slider" min="0.1" max="20" step="0.1" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <canvas id="sim13Canvas" width="600" height="250"></canvas>
+                    <div class="flex justify-center gap-4 text-xs font-mono mt-2">
+                        <span class="text-blue-500 font-bold">--- Point Charge Approx</span>
+                        <span class="text-red-500 font-bold">--- Infinite Plane Limit</span>
+                        <span class="text-chapterblue font-bold">— Exact Disk Field</span>
+                    </div>
+                    <script>
+                        function drawSim13() {
+                            const canvas = document.getElementById('sim13Canvas');
+                            if(!canvas) return;
+                            const ctx = canvas.getContext('2d');
+                            const w = canvas.width, h = canvas.height;
+                            ctx.clearRect(0,0,w,h);
+                            
+                            const R = parseFloat(document.getElementById('sim13-slider').value);
+                            document.getElementById('sim13-r-val').innerText = R.toFixed(1);
+                            
+                            const zMax = 20;
+                            const mapZ = (z) => 40 + (z / zMax) * (w - 80);
+                            // E_z normalized so that max (infinite plane) = 1
+                            const mapE = (E) => h - 40 - E * (h - 80);
+                            
+                            // Draw Axes
+                            ctx.strokeStyle = '#ccc'; ctx.beginPath(); ctx.lineWidth = 1;
+                            ctx.moveTo(40, h-40); ctx.lineTo(w-40, h-40); // z-axis
+                            ctx.moveTo(40, h-40); ctx.lineTo(40, 20); // E-axis
+                            ctx.stroke();
+                            
+                            ctx.fillStyle = '#666'; ctx.font = '12px sans-serif';
+                            ctx.fillText('Distance (z)', w/2, h-10);
+                            ctx.save(); ctx.translate(15, h/2); ctx.rotate(-Math.PI/2);
+                            ctx.fillText('Electric Field (E)', 0, 0); ctx.restore();
+
+                            // Infinite Plane Asymptote (E = 1)
+                            ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.setLineDash([5,5]); ctx.lineWidth = 2;
+                            ctx.moveTo(40, mapE(1)); ctx.lineTo(w-40, mapE(1));
+                            ctx.stroke(); ctx.setLineDash([]);
+                            
+                            // Point Charge Approx (E ~ R^2 / 2z^2)
+                            ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.setLineDash([3,3]); ctx.lineWidth = 2;
+                            for(let z=0.5; z<=zMax; z+=0.1) {
+                                let E_point = (R*R) / (2 * z*z);
+                                if(E_point > 1.2) continue; // Keep in bounds
+                                if(z===0.5 || E_point > 1.2) ctx.moveTo(mapZ(z), mapE(E_point));
+                                else ctx.lineTo(mapZ(z), mapE(E_point));
+                            }
+                            ctx.stroke(); ctx.setLineDash([]);
+
+                            // Exact Disk Field
+                            ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 3;
+                            for(let z=0; z<=zMax; z+=0.1) {
+                                let E = 1 - (z / Math.sqrt(z*z + R*R));
+                                if(z===0) ctx.moveTo(mapZ(z), mapE(E));
+                                else ctx.lineTo(mapZ(z), mapE(E));
+                            }
+                            ctx.stroke();
+                        }
+                        // Bind events
+                        setTimeout(() => {
+                            const slider = document.getElementById('sim13-slider');
+                            if(slider) {
+                                slider.addEventListener('input', drawSim13);
+                                drawSim13();
+                            }
+                        }, 200);
+                    </script>
+                </div>
+
+                <div class="chapter-end-rule"></div>
+            </section>
             <!-- Conclusion -->
             <section id="ch-conclusion" class="chapter-content">
                 <div class="text-center mt-10 mb-16">
@@ -2614,6 +3230,7 @@
             { id: 13, title: "Diff. Equations का दर्शन", label: "अध्याय 13", htmlId: "ch-13" },
             { id: 14, title: "Sine Functions & Theorem", label: "अध्याय 14", htmlId: "ch-14" },
             { id: 15, title: "Functions का निर्माण", label: "अध्याय 15", htmlId: "ch-15" },
+            { id: 16, title: "दर्शन का अनुप्रयोग", label: "अध्याय 16", htmlId: "ch-16" }, 
             { id: 'conclusion', title: "समापन एवं टिप्पणियाँ", label: "समापन", htmlId: "ch-conclusion" }
         ];
 
