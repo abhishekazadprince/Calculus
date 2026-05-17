@@ -3115,6 +3115,549 @@
 
                 <div class="chapter-end-rule"></div>
             </section>
+            <section id="ch-17" class="chapter-content">
+                <h2 class="ch-title-border">अध्याय 17: AC Circuits, Complex Numbers और Phase Geometry</h2>
+                
+                <p>Alternating current (AC) circuits calculus, differential equations, oscillation theory तथा complex numbers के बीच के सम्बन्ध को समझने के लिए अत्यन्त महत्वपूर्ण examples प्रदान करते हैं। Students प्रायः resistance, inductance, capacitance, reactance तथा impedance जैसे concepts को केवल formulas के रूप में सीखते हैं:</p>
+
+                $$ V=IR, \qquad X_L=\omega L, \qquad X_C=\frac1{\omega C}. $$
+
+                <p>इसके बाद अचानक complex numbers तथा phasor diagrams introduce कर दिए जाते हैं:</p>
+
+                $$ Z=R+j(X_L-X_C). $$
+
+                <p>इस transition के कारण अनेक conceptual confusions उत्पन्न होते हैं:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>resistance phase diagram में क्यों दिखाई देता है जबकि वह स्वयं sinusoidal quantity नहीं है?</li>
+                    <li>inductive reactance तथा capacitive reactance को vectors की तरह क्यों represent किया जाता है?</li>
+                    <li>यदि सभी quantities ohm में measured हैं, तो फिर उन्हें perpendicular directions में क्यों दिखाया जाता है?</li>
+                    <li>आखिर complex numbers AC theory में naturally क्यों emerge करते हैं?</li>
+                </ol>
+
+                <p>इस chapter का उद्देश्य इन प्रश्नों को calculus, local change, stabilization तथा computational interpretation के viewpoint से समझना है।</p>
+
+                <div class="boxed-statement">
+                    AC theory oscillatory local evolution की geometry है।
+                </div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.1 Resistance as Instantaneous Proportionality</h3>
+                
+                <p>सबसे पहले resistor को देखें। Ohm's law:</p>
+                $$ V=IR. $$
+                <p>यह equation essentially यह कहती है कि प्रत्येक instant पर voltage current के proportional है।</p>
+                
+                <p>यदि current sinusoidal हो:</p>
+                $$ I(t)=I_0\sin\omega t, $$
+                <p>तो:</p>
+                $$ V(t)=RI_0\sin\omega t. $$
+
+                <p>यहाँ voltage तथा current दोनों same phase में हैं। Maxima तथा minima same instants पर occur करते हैं। इसलिए resistor phase shift produce नहीं करता। यह अत्यन्त महत्वपूर्ण point है:</p>
+
+                <div class="boxed-statement">
+                    Resistance स्वयं oscillatory quantity नहीं है।
+                </div>
+
+                <p>बल्कि resistance केवल instantaneous proportional update rule है। यह chapter की broader philosophy के अनुसार local relation है:</p>
+
+                <div class="boxed-statement">
+                    present voltage depends only on present current.
+                </div>
+
+                <p>कोई accumulation नहीं है। कोई memory effect नहीं है। कोई delayed response नहीं है। इसी कारण resistance phase geometry में real axis पर represent किया जाता है।</p>
+
+                
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-10 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 14: Pure Resistive Circuit (In-Phase)</h4>
+                    <p class="text-sm text-gray-600 mb-4">Observe how Voltage (Red) and Current (Blue) rise and fall together in a purely resistive circuit. Their rotating phasors on the left always overlap (phase angle = $0^\circ$).</p>
+                    <canvas id="sim17aCanvas" width="600" height="250"></canvas>
+                    <script>
+                        (function() {
+                            const canvas = document.getElementById('sim17aCanvas');
+                            if(!canvas) return;
+                            const ctx = canvas.getContext('2d');
+                            let time = 0;
+
+                            function draw() {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                const w = canvas.width, h = canvas.height;
+                                const centerX = 100, centerY = h / 2;
+                                const rV = 80, rI = 50;
+                                const omega = 0.05;
+                                
+                                // Calculate angles
+                                const theta = time * omega;
+
+                                // Draw Phasor Circle
+                                ctx.beginPath(); ctx.strokeStyle = '#e5e7eb'; ctx.arc(centerX, centerY, rV, 0, 2*Math.PI); ctx.stroke();
+                                ctx.beginPath(); ctx.arc(centerX, centerY, rI, 0, 2*Math.PI); ctx.stroke();
+                                
+                                // Draw axes
+                                ctx.beginPath(); ctx.moveTo(20, centerY); ctx.lineTo(180, centerY); ctx.stroke();
+                                ctx.beginPath(); ctx.moveTo(centerX, 20); ctx.lineTo(centerX, h-20); ctx.stroke();
+
+                                // Draw Phasors
+                                const vX = centerX + rV * Math.cos(-theta), vY = centerY + rV * Math.sin(-theta);
+                                const iX = centerX + rI * Math.cos(-theta), iY = centerY + rI * Math.sin(-theta);
+                                
+                                ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 3;
+                                ctx.moveTo(centerX, centerY); ctx.lineTo(vX, vY); ctx.stroke(); // Voltage Phasor
+                                ctx.beginPath(); ctx.fillStyle = '#ef4444'; ctx.arc(vX, vY, 4, 0, 2*Math.PI); ctx.fill();
+
+                                ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3;
+                                ctx.moveTo(centerX, centerY); ctx.lineTo(iX, iY); ctx.stroke(); // Current Phasor
+                                ctx.beginPath(); ctx.fillStyle = '#3b82f6'; ctx.arc(iX, iY, 4, 0, 2*Math.PI); ctx.fill();
+
+                                // Draw Waveforms
+                                const waveStartX = 220;
+                                ctx.beginPath(); ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+                                ctx.moveTo(waveStartX, centerY); ctx.lineTo(w - 20, centerY); ctx.stroke(); // Time axis
+
+                                ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+                                for(let x = waveStartX; x < w - 20; x++) {
+                                    let tOffset = (x - waveStartX) * 0.03;
+                                    let y = centerY + rV * Math.sin(-(theta - tOffset));
+                                    if(x === waveStartX) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+
+                                ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2;
+                                for(let x = waveStartX; x < w - 20; x++) {
+                                    let tOffset = (x - waveStartX) * 0.03;
+                                    let y = centerY + rI * Math.sin(-(theta - tOffset));
+                                    if(x === waveStartX) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+
+                                // Connecting lines
+                                ctx.beginPath(); ctx.strokeStyle = 'rgba(239,68,68,0.3)'; ctx.setLineDash([5,5]);
+                                ctx.moveTo(vX, vY); ctx.lineTo(waveStartX, vY); ctx.stroke();
+                                ctx.beginPath(); ctx.strokeStyle = 'rgba(59,130,246,0.3)';
+                                ctx.moveTo(iX, iY); ctx.lineTo(waveStartX, iY); ctx.stroke();
+                                ctx.setLineDash([]);
+
+                                time++;
+                                requestAnimationFrame(draw);
+                            }
+                            draw();
+                        })();
+                    </script>
+                </div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.2 Inductance and Local Change</h3>
+                
+                <p>अब inductor देखें। Inductor के लिए experimentally प्राप्त relation है:</p>
+                $$ V=L\frac{dI}{dt}. $$
+                
+                <p>यहाँ एक fundamentally different structure उपस्थित है। Voltage current के present value पर depend नहीं कर रहा। बल्कि:</p>
+
+                <div class="boxed-statement">
+                    current किस rate से बदल रहा है,
+                </div>
+                
+                <p>उस पर depend कर रहा है। यह derivative structure है। यदि:</p>
+                $$ I(t)=I_0\sin\omega t, $$
+                <p>तो:</p>
+                $$ \frac{dI}{dt} = \omega I_0\cos\omega t. $$
+                <p>अतः:</p>
+                $$ V = \omega L I_0\cos\omega t. $$
+
+                <p>अब:</p>
+                $$ \cos\omega t = \sin(\omega t+90^\circ). $$
+                <p>अतः:</p>
+
+                <div class="boxed-statement">
+                    inductor voltage current से $90^\circ$ lead करता है।
+                </div>
+
+                <p>यहाँ phase shift किसी mysterious geometrical trick से उत्पन्न नहीं हुआ। बल्कि derivative structure से naturally emerge हुआ। Derivative oscillatory systems में local change को extract करता है। और sinusoidal systems में local change geometrically phase rotation की तरह behave करता है।</p>
+
+                
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.3 Derivative as Rotational Structure</h3>
+                
+                <p>Complex numbers यहाँ naturally emerge होते हैं। Euler relation:</p>
+                $$ e^{i\theta}=\cos\theta+i\sin\theta. $$
+
+                <p>यदि oscillatory current को इस प्रकार लिखें:</p>
+                $$ I(t)=I_0 e^{i\omega t}, $$
+                <p>तो differentiation gives:</p>
+                $$ \frac{d}{dt}e^{i\omega t} = i\omega e^{i\omega t}. $$
+
+                <p>यह equation अत्यन्त deep significance रखती है। यह बताती है कि differentiation oscillatory systems में multiplication by:</p>
+                $$ i $$
+                <p>produce करता है। लेकिन complex plane में multiplication by $i$ का अर्थ है:</p>
+
+                <div class="boxed-statement">
+                    $90^\circ$ rotation
+                </div>
+
+                <p>अतः inductive phase shift complex-number geometry का direct consequence है।</p>
+
+                
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.4 Capacitance and Accumulation</h3>
+                
+                <p>अब capacitor देखें। Charge तथा voltage relation:</p>
+                $$ Q=CV. $$
+                <p>Current:</p>
+                $$ I=\frac{dQ}{dt}. $$
+                <p>Combine करें:</p>
+                $$ I=C\frac{dV}{dt}. $$
+                <p>या equivalently:</p>
+                $$ V=\frac1C\int I\,dt. $$
+
+                <p>अब capacitor derivative नहीं बल्कि accumulation structure बन जाता है। इस पुस्तक की earlier philosophy के अनुसार:</p>
+
+                <div class="boxed-statement">
+                    integration = accumulation of local changes
+                </div>
+
+                <p>अतः capacitor का voltage repeated local charge accumulation से emerge करता है। यदि sinusoidal current हो:</p>
+                $$ I=I_0\sin\omega t, $$
+                <p>तो integration gives:</p>
+                $$ V = -\frac{I_0}{\omega C}\cos\omega t. $$
+
+                <p>अर्थात:</p>
+                <div class="boxed-statement">
+                    capacitor voltage current से $90^\circ$ lag करता है।
+                </div>
+
+                <p>इस प्रकार:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>resistance instantaneous proportionality है,</li>
+                    <li>inductance local change structure है,</li>
+                    <li>capacitance accumulated local change structure है।</li>
+                </ol>
+                <p>यही तीनों behaviors phase geometry को जन्म देते हैं।</p>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-10 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 15: Reactive Circuits Phase Shift</h4>
+                    <p class="text-sm text-gray-600 mb-4">Select the component to observe how the temporal derivative and integral naturally create $+90^\circ$ and $-90^\circ$ phase shifts.</p>
+                    <div class="mb-4 flex gap-4 justify-center">
+                        <button id="btn-ind" class="bg-chapterblue text-white px-4 py-2 rounded shadow hover:bg-opacity-90 transition font-semibold">Inductor (V leads I)</button>
+                        <button id="btn-cap" class="bg-chapterblue text-white px-4 py-2 rounded shadow hover:bg-opacity-90 transition font-semibold opacity-50">Capacitor (V lags I)</button>
+                    </div>
+                    <canvas id="sim17bCanvas" width="600" height="250"></canvas>
+                    <script>
+                        (function() {
+                            const canvas = document.getElementById('sim17bCanvas');
+                            if(!canvas) return;
+                            const ctx = canvas.getContext('2d');
+                            let time = 0;
+                            let mode = 'inductor'; // 'inductor' or 'capacitor'
+
+                            document.getElementById('btn-ind').addEventListener('click', (e) => {
+                                mode = 'inductor';
+                                e.target.classList.remove('opacity-50');
+                                document.getElementById('btn-cap').classList.add('opacity-50');
+                            });
+                            document.getElementById('btn-cap').addEventListener('click', (e) => {
+                                mode = 'capacitor';
+                                e.target.classList.remove('opacity-50');
+                                document.getElementById('btn-ind').classList.add('opacity-50');
+                            });
+
+                            function draw() {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                const w = canvas.width, h = canvas.height;
+                                const centerX = 100, centerY = h / 2;
+                                const rV = 80, rI = 50;
+                                const omega = 0.05;
+                                
+                                const thetaI = time * omega;
+                                const phaseShift = mode === 'inductor' ? Math.PI/2 : -Math.PI/2;
+                                const thetaV = thetaI + phaseShift;
+
+                                // Draw Phasor Circle
+                                ctx.beginPath(); ctx.strokeStyle = '#e5e7eb'; ctx.arc(centerX, centerY, rV, 0, 2*Math.PI); ctx.stroke();
+                                ctx.beginPath(); ctx.arc(centerX, centerY, rI, 0, 2*Math.PI); ctx.stroke();
+                                
+                                // Draw axes
+                                ctx.beginPath(); ctx.moveTo(20, centerY); ctx.lineTo(180, centerY); ctx.stroke();
+                                ctx.beginPath(); ctx.moveTo(centerX, 20); ctx.lineTo(centerX, h-20); ctx.stroke();
+
+                                // Draw Phasors
+                                const vX = centerX + rV * Math.cos(-thetaV), vY = centerY + rV * Math.sin(-thetaV);
+                                const iX = centerX + rI * Math.cos(-thetaI), iY = centerY + rI * Math.sin(-thetaI);
+                                
+                                ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 3;
+                                ctx.moveTo(centerX, centerY); ctx.lineTo(vX, vY); ctx.stroke(); // Voltage
+                                ctx.beginPath(); ctx.fillStyle = '#ef4444'; ctx.arc(vX, vY, 4, 0, 2*Math.PI); ctx.fill();
+
+                                ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3;
+                                ctx.moveTo(centerX, centerY); ctx.lineTo(iX, iY); ctx.stroke(); // Current
+                                ctx.beginPath(); ctx.fillStyle = '#3b82f6'; ctx.arc(iX, iY, 4, 0, 2*Math.PI); ctx.fill();
+
+                                // Draw Waveforms
+                                const waveStartX = 220;
+                                ctx.beginPath(); ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+                                ctx.moveTo(waveStartX, centerY); ctx.lineTo(w - 20, centerY); ctx.stroke(); 
+
+                                ctx.beginPath(); ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+                                for(let x = waveStartX; x < w - 20; x++) {
+                                    let tOffset = (x - waveStartX) * 0.03;
+                                    let y = centerY + rV * Math.sin(-(thetaV - tOffset));
+                                    if(x === waveStartX) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+
+                                ctx.beginPath(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2;
+                                for(let x = waveStartX; x < w - 20; x++) {
+                                    let tOffset = (x - waveStartX) * 0.03;
+                                    let y = centerY + rI * Math.sin(-(thetaI - tOffset));
+                                    if(x === waveStartX) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                                }
+                                ctx.stroke();
+
+                                time++;
+                                requestAnimationFrame(draw);
+                            }
+                            draw();
+                        })();
+                    </script>
+                </div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.5 Why Complex Numbers Become Necessary</h3>
+                
+                <p>अब एक deeper question उठता है:</p>
+                <div class="boxed-statement">
+                    complex numbers की आवश्यकता ही क्यों पड़ी?
+                </div>
+
+                <p>Ordinary real numbers केवल magnitude represent करते हैं। लेकिन oscillatory systems में दो independent structures simultaneously उपस्थित होते हैं:</p>
+                <ol class="list-decimal pl-10 mb-4 space-y-2 text-lg text-slate-700">
+                    <li>amplitude,</li>
+                    <li>phase.</li>
+                </ol>
+
+                <p>यदि केवल real numbers उपयोग करें, तो repeatedly:</p>
+                $$ \sin\omega t, \qquad \cos\omega t, \qquad -\sin\omega t, \qquad -\cos\omega t $$
+                <p>के बीच transform करना पड़ेगा। Complex exponentials इस entire rotational evolution को compactly encode कर देते हैं:</p>
+                $$ e^{i\omega t}. $$
+
+                <p>अब:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>differentiation becomes multiplication,</li>
+                    <li>integration becomes division,</li>
+                    <li>phase shift becomes rotation.</li>
+                </ol>
+                <p>इस प्रकार complex numbers oscillatory local evolution की natural computational language बन जाते हैं।</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.6 Impedance as Complex Response Structure</h3>
+                
+                <p>अब impedance को समझें।</p>
+                <p>Resistor:</p>
+                $$ Z_R=R. $$
+                <p>Inductor:</p>
+                $$ Z_L=j\omega L. $$
+                <p>Capacitor:</p>
+                $$ Z_C=-\frac{j}{\omega C}. $$
+
+                <p>इसलिए total impedance:</p>
+                $$ Z = R+j\left(\omega L-\frac1{\omega C}\right). $$
+                <p>या:</p>
+                $$ Z=R+j(X_L-X_C). $$
+                <p>यहाँ:</p>
+                $$ X_L=\omega L, \qquad X_C=\frac1{\omega C}. $$
+
+                <p>अब important conceptual point देखें।</p>
+                <div class="boxed-statement">
+                    reactance physical vector नहीं है।
+                </div>
+                <p>और:</p>
+                <div class="boxed-statement">
+                    impedance diagram physical space नहीं है।
+                </div>
+
+                <p>Complex plane यहाँ phase-space geometry represent कर रहा है। Real axis corresponds to:</p>
+                $$ \text{in-phase behavior} $$
+                <p>और imaginary axis corresponds to:</p>
+                $$ \text{quadrature phase behavior}. $$
+                <p>Thus impedance phase relations की geometric encoding बन जाता है।</p>
+
+                
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.7 Why Quantities with Same Units Behave Orthogonally</h3>
+                
+                <p>एक common objection यह होता है:</p>
+                <div class="boxed-statement">
+                    यदि $R, X_L, X_C$ सभी ohm में हैं,
+                </div>
+                <p>तो perpendicular directions क्यों? लेकिन orthogonality dimensions से determine नहीं होती।</p>
+                <p>उदाहरण:</p>
+                $$ \vec r = 3\hat i+4\hat j. $$
+                <p>दोनों terms meters में हैं। फिर भी directions different हैं। इसी प्रकार:</p>
+                $$ Z=R+jX. $$
+                <p>दोनों terms ohms में हैं। लेकिन:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>resistance no phase shift produce करता है,</li>
+                    <li>reactance phase-shifted response produce करता है।</li>
+                </ol>
+                <p>Thus geometry phase structure से emerge होती है, dimensional analysis से नहीं।</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.8 Phasor Diagram as Oscillatory Geometry</h3>
+                
+                <p>Phasor diagrams को अक्सर students ordinary vectors समझ लेते हैं। लेकिन वास्तव में phasors rotating oscillatory states की representation हैं। यदि:</p>
+                $$ V(t)=V_0e^{i\omega t}, $$
+                <p>तो phasor:</p>
+                $$ V_0 $$
+                <p>उस rotating state का compact representation है। Different components different phase orientations रखते हैं। इसीलिए:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>resistance real axis पर,</li>
+                    <li>inductive reactance positive imaginary axis पर,</li>
+                    <li>capacitive reactance negative imaginary axis पर represent किए जाते हैं।</li>
+                </ol>
+                <p>यह geometry spatial geometry नहीं बल्कि temporal phase geometry है।</p>
+
+                <div class="bg-white border border-gray-200 rounded-xl p-6 my-10 shadow-sm">
+                    <h4 class="text-xl font-bold text-chapterblue mb-2">Simulation 16: The Impedance Complex Plane</h4>
+                    <p class="text-sm text-gray-600 mb-4">Adjust the Resistance ($R$), Inductive Reactance ($X_L$), and Capacitive Reactance ($X_C$) to see how temporal phase shifts naturally map onto the complex plane geometry.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-700">Resistance ($R$): <span id="val-r" class="text-blue-600">50</span> $\Omega$</label>
+                            <input type="range" id="sl-r" min="10" max="100" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-700">Inductive Reactance ($X_L$): <span id="val-xl" class="text-red-500">80</span> $\Omega$</label>
+                            <input type="range" id="sl-xl" min="0" max="100" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold mb-1 text-gray-700">Capacitive Reactance ($X_C$): <span id="val-xc" class="text-purple-600">40</span> $\Omega$</label>
+                            <input type="range" id="sl-xc" min="0" max="100" value="40" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+                    <canvas id="sim17cCanvas" width="600" height="300" class="bg-gray-50"></canvas>
+                    <div class="text-center mt-3 font-mono font-bold text-lg">
+                        $Z =$ <span id="val-z-mag" class="text-chapterblue">64.03</span> $\Omega \quad \angle$ <span id="val-z-phase" class="text-chapterblue">38.66</span>$^\circ$
+                    </div>
+                    <script>
+                        (function() {
+                            const canvas = document.getElementById('sim17cCanvas');
+                            if(!canvas) return;
+                            const ctx = canvas.getContext('2d');
+                            
+                            const slR = document.getElementById('sl-r');
+                            const slXL = document.getElementById('sl-xl');
+                            const slXC = document.getElementById('sl-xc');
+                            
+                            function draw() {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                const w = canvas.width, h = canvas.height;
+                                const originX = 150, originY = h / 2;
+                                const scale = 1.5;
+                                
+                                const R = parseFloat(slR.value);
+                                const XL = parseFloat(slXL.value);
+                                const XC = parseFloat(slXC.value);
+                                const X_net = XL - XC;
+                                
+                                document.getElementById('val-r').innerText = R;
+                                document.getElementById('val-xl').innerText = XL;
+                                document.getElementById('val-xc').innerText = XC;
+                                
+                                const Z_mag = Math.sqrt(R*R + X_net*X_net);
+                                const Z_phase = Math.atan2(X_net, R) * (180 / Math.PI);
+                                
+                                document.getElementById('val-z-mag').innerText = Z_mag.toFixed(2);
+                                document.getElementById('val-z-phase').innerText = Z_phase.toFixed(2);
+                                
+                                // Draw Grid & Axes
+                                ctx.beginPath(); ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 1;
+                                for(let i = 0; i < w; i += 20 * scale) { ctx.moveTo(originX + i, 0); ctx.lineTo(originX + i, h); ctx.moveTo(originX - i, 0); ctx.lineTo(originX - i, h); }
+                                for(let i = 0; i < h; i += 20 * scale) { ctx.moveTo(0, originY + i); ctx.lineTo(w, originY + i); ctx.moveTo(0, originY - i); ctx.lineTo(w, originY - i); }
+                                ctx.stroke();
+                                
+                                ctx.beginPath(); ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 2;
+                                ctx.moveTo(0, originY); ctx.lineTo(w, originY); // Real Axis
+                                ctx.moveTo(originX, 0); ctx.lineTo(originX, h); // Imag Axis
+                                ctx.stroke();
+                                
+                                ctx.fillStyle = '#6b7280'; ctx.font = '12px sans-serif';
+                                ctx.fillText("Real Axis (Resistance)", w - 130, originY - 10);
+                                ctx.fillText("+j (Inductive)", originX + 10, 20);
+                                ctx.fillText("-j (Capacitive)", originX + 10, h - 10);
+
+                                // Draw Vectors (Note: Y axis is inverted in canvas, so subtract for positive imaginary)
+                                const endR_X = originX + R * scale, endR_Y = originY;
+                                const endZ_X = originX + R * scale, endZ_Y = originY - X_net * scale;
+                                
+                                // Draw R Vector
+                                ctx.beginPath(); ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 4;
+                                ctx.moveTo(originX, originY); ctx.lineTo(endR_X, endR_Y); ctx.stroke();
+                                ctx.fillStyle = '#2563eb'; ctx.fillText(`R = ${R}`, originX + (R*scale)/2 - 10, originY + 15);
+                                
+                                // Draw Net Reactance Vector starting from tip of R
+                                ctx.beginPath(); ctx.strokeStyle = '#db2777'; ctx.lineWidth = 4;
+                                ctx.moveTo(endR_X, endR_Y); ctx.lineTo(endZ_X, endZ_Y); ctx.stroke();
+                                ctx.fillStyle = '#db2777'; ctx.fillText(`jX = j${X_net}`, endR_X + 10, originY - (X_net*scale)/2);
+
+                                // Draw Z Vector
+                                ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 4;
+                                ctx.moveTo(originX, originY); ctx.lineTo(endZ_X, endZ_Y); ctx.stroke();
+                                ctx.fillStyle = '#1F3A6D'; ctx.font = 'bold 14px sans-serif';
+                                ctx.fillText(`Z = ${Z_mag.toFixed(1)} \u2220 ${Z_phase.toFixed(1)}\xB0`, originX + (R*scale)/2 - 20, originY - (X_net*scale)/2 - 10);
+                                
+                                // Draw Angle Arc
+                                ctx.beginPath(); ctx.strokeStyle = '#1F3A6D'; ctx.lineWidth = 1;
+                                ctx.arc(originX, originY, 30, Math.min(0, -Z_phase * Math.PI/180), Math.max(0, -Z_phase * Math.PI/180));
+                                ctx.stroke();
+                            }
+                            
+                            slR.addEventListener('input', draw);
+                            slXL.addEventListener('input', draw);
+                            slXC.addEventListener('input', draw);
+                            draw();
+                        })();
+                    </script>
+                </div>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.9 Energy Interpretation</h3>
+                
+                <p>Resistance तथा reactance का एक deeper physical difference energy behavior में उपस्थित है। Resistor continuously energy dissipate करता है:</p>
+                $$ P=I^2R. $$
+                <p>Energy heat में convert होकर system से बाहर चली जाती है। लेकिन inductor तथा capacitor energy store तथा release करते हैं।</p>
+                
+                <p>Inductor:</p>
+                $$ U_L=\frac12 LI^2. $$
+                <p>Capacitor:</p>
+                $$ U_C=\frac12 CV^2. $$
+
+                <p>अतः:</p>
+                <div class="boxed-statement">
+                    reactive systems local energy exchange structures हैं।
+                </div>
+                <p>यही repeated energy exchange oscillatory memory effects तथा phase shifts produce करता है。</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.10 A Broader Computational Interpretation</h3>
+                
+                <p>इस chapter की पूरी discussion broader computational philosophy से जुड़ी हुई है। Oscillatory systems में:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>local updates continuously occur करते हैं,</li>
+                    <li>derivatives local change encode करते हैं,</li>
+                    <li>integrals accumulated change encode करते हैं,</li>
+                    <li>complex numbers rotational evolution encode करते हैं,</li>
+                    <li>phasors stabilized oscillatory states encode करते हैं।</li>
+                </ol>
+                <p>इस प्रकार AC circuit theory केवल electrical engineering topic नहीं है। यह calculus, oscillation theory, differential equations तथा complex geometry की unified computational structure है।</p>
+
+                <h3 class="text-2xl font-bold text-chapterblue mt-10 mb-4">17.11 Chapter Summary</h3>
+                <p>इस chapter में हमने देखा कि:</p>
+                <ol class="list-decimal pl-10 mb-8 space-y-2 text-lg text-slate-700">
+                    <li>resistance instantaneous proportional response है,</li>
+                    <li>inductance derivative-based local change structure है,</li>
+                    <li>capacitance accumulated local change structure है,</li>
+                    <li>complex numbers oscillatory evolution की natural language हैं,</li>
+                    <li>impedance phase-space response structure है,</li>
+                    <li>phasor diagrams temporal phase geometry represent करते हैं।</li>
+                </ol>
+
+                <div class="boxed-statement !bg-chapterblue !text-white !border-goldline">
+                    AC theory oscillatory local evolution की complex geometry है।
+                </div>
+
+                <div class="chapter-end-rule"></div>
+            </section>
             <!-- Conclusion -->
             <section id="ch-conclusion" class="chapter-content">
                 <div class="text-center mt-10 mb-16">
@@ -3231,6 +3774,7 @@
             { id: 14, title: "Sine Functions & Theorem", label: "अध्याय 14", htmlId: "ch-14" },
             { id: 15, title: "Functions का निर्माण", label: "अध्याय 15", htmlId: "ch-15" },
             { id: 16, title: "दर्शन का अनुप्रयोग", label: "अध्याय 16", htmlId: "ch-16" }, 
+            { id: 17, title: "AC Circuits & Phase Geometry", label: "अध्याय 17", htmlId: "ch-17" },
             { id: 'conclusion', title: "समापन एवं टिप्पणियाँ", label: "समापन", htmlId: "ch-conclusion" }
         ];
 
